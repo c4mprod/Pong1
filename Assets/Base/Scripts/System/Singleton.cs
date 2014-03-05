@@ -1,18 +1,18 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Singleton<T>
     where T : new()
 {
-    private static T _instance;
+    private static T m_Instance;
 
-    public static T instance
+    public static T Instance
     {
         get
         {
-            if (_instance == null)
-                _instance = new T();
-            return (_instance);
+            if (m_Instance == null)
+                m_Instance = new T();
+            return m_Instance;
         }
     }
 }

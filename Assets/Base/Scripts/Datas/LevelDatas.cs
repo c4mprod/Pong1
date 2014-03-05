@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerDatas 
+public class LevelDatas
 {
 }

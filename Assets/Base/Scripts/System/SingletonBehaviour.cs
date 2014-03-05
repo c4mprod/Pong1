@@ -4,22 +4,22 @@ using System.Collections;
 public class SingletonBehaviour<T> : MonoBehaviour
     where T : MonoBehaviour
 {
-    private static T _instance;
+    private static T m_Instance;
 
-    public static T instance
+    public static T Instance
     {
         get
         {
-            if (_instance == null)
+            if (m_Instance == null)
             {
-                if ((_instance = (T)GameObject.FindObjectOfType(typeof(T))) == null)
+                if ((m_Instance = (T)GameObject.FindObjectOfType(typeof(T))) == null)
                 {
-                    GameObject o = new GameObject("SingletonBehaviour<" + typeof(T).ToString() + ">");
-                    _instance = o.AddComponent<T>();
-                    DontDestroyOnLoad(_instance);
+                    GameObject Obj = new GameObject("SingletonBehaviour<" + typeof(T).ToString() + ">");
+                    m_Instance = Obj.AddComponent<T>();
+                    DontDestroyOnLoad(m_Instance);
                 }
             }
-            return _instance;
+            return m_Instance;
         }
     }
 }
