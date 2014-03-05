@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BallSpawn : MonoBehaviour 
+public class BallSpawn : MonoBehaviour
 {
     // Used to set the BallInstance velocity with the rights force and direction.
     private Vector3 m_SpawnForce;
@@ -42,6 +42,8 @@ public class BallSpawn : MonoBehaviour
 
     #endregion
 
+    #region "Events functions"
+
     void OnSpawn(Object _Obj, System.EventArgs _EventArg)
     {
         Goal.GoalVO lGoalVO = (Goal.GoalVO)_EventArg;
@@ -49,7 +51,7 @@ public class BallSpawn : MonoBehaviour
         this.m_BallInstance.transform.position = this.transform.position;
         this.m_BallInstance.transform.rotation = Quaternion.identity;
 
-        // Reverse the ball spawn direction against the goaling player.
+        // Set the ball spawn direction to the goaling player.
         if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player2)
             || (this.m_SpawnForce.x < 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1))
             this.m_SpawnForce.x *= -1;
@@ -58,7 +60,9 @@ public class BallSpawn : MonoBehaviour
         this.m_Spawn = false;
     }
 
-	void Update() 
+    #endregion
+
+    void Update()
     {
         if (this.m_Spawn)
         {
@@ -67,5 +71,5 @@ public class BallSpawn : MonoBehaviour
             this.m_BallInstance.rigidbody2D.velocity = this.m_SpawnForce.normalized * this.m_SpawnForceSpeed;
             this.m_Spawn = false;
         }
-	}
+    }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonBehaviour<GameManager>
 {
     #region "Enumerations"
 
@@ -73,6 +73,10 @@ public class GameManager : MonoBehaviour
         GameManager.GoalEvent(this, lVO);
         Debug.Log("Player1 Score : " + GlobalDatas.Instance.m_Player1.m_Score);
         Debug.Log("Player2 Score : " + GlobalDatas.Instance.m_Player2.m_Score);
+    }
+
+    public void OnModifyInput(Object _Obj, System.EventArgs _EventArg)
+    {
     }
 
     #endregion

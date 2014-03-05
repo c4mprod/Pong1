@@ -17,21 +17,18 @@ public class Goal : MonoBehaviour
     #endregion
 
     public GameManager.EPlayer m_EPlayer;
-    private GameManager m_GameManager;
     private GoalVO m_GoalVO = new GoalVO();
 
     #region "OnEnable / OnDisable"
 
     void OnEnable()
     {
-        this.m_GameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-
-        this.m_GoalEvent += this.m_GameManager.OnGoal;
+        this.m_GoalEvent += GameManager.Instance.OnGoal;
     }
 
     void OnDisable()
     {
-        this.m_GoalEvent -= this.m_GameManager.OnGoal;
+        this.m_GoalEvent -= GameManager.Instance.OnGoal;
     }
 
     #endregion
