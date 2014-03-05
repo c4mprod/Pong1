@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         else
             this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
 
-        GameManager.GoalEvent(this, null);
+        GameManager.GoalEvent(this, lVO);
         Debug.Log("Player1 Score : " + GlobalDatas.Instance.m_Player1.m_Score);
         Debug.Log("Player2 Score : " + GlobalDatas.Instance.m_Player2.m_Score);
     }

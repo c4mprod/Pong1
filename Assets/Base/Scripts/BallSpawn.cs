@@ -44,8 +44,16 @@ public class BallSpawn : MonoBehaviour
 
     void OnSpawn(Object _Obj, System.EventArgs _EventArg)
     {
+        Goal.GoalVO lGoalVO = (Goal.GoalVO)_EventArg;
+
         this.m_BallInstance.transform.position = this.transform.position;
         this.m_BallInstance.transform.rotation = Quaternion.identity;
+
+        // If the SpawnForce.x is to the right side and the player1 (left side) goal, we launch the ball against player1.
+        if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1)
+            || (this.m_SpawnForce.x < 0.0f))
+            this.m_SpawnForce.x *= -1;
+
         this.m_BallInstance.rigidbody2D.velocity = this.m_SpawnForce.normalized * this.m_SpawnForceSpeed;
         this.m_Spawn = false;
     }
