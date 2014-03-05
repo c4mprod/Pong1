@@ -49,9 +49,9 @@ public class BallSpawn : MonoBehaviour
         this.m_BallInstance.transform.position = this.transform.position;
         this.m_BallInstance.transform.rotation = Quaternion.identity;
 
-        // If the SpawnForce.x is to the right side and the player1 (left side) goal, we launch the ball against player1.
-        if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1)
-            || (this.m_SpawnForce.x < 0.0f))
+        // Reverse the ball spawn direction against the goaling player.
+        if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player2)
+            || (this.m_SpawnForce.x < 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1))
             this.m_SpawnForce.x *= -1;
 
         this.m_BallInstance.rigidbody2D.velocity = this.m_SpawnForce.normalized * this.m_SpawnForceSpeed;
