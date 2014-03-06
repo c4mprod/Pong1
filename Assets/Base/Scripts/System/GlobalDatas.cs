@@ -10,7 +10,7 @@ public class GlobalDatas : Singleton<GlobalDatas>
 
     public PlayerDatas m_Player1 = new PlayerDatas();
     public PlayerDatas m_Player2 = new PlayerDatas();
-    public InputsBindingDatas m_InputsBinding = new InputsBindingDatas();
+    public InputsBindingDatas m_InputsBinding;
 
     #endregion
 
@@ -43,17 +43,25 @@ public class GlobalDatas : Singleton<GlobalDatas>
 
     private void InitializeInputsBinding()
     {
-        this.m_InputsBinding.m_Player1BindableControls["MoveUp"] = KeyCode.None;
-        this.m_InputsBinding.m_Player1BindableControls["MoveDown"] = KeyCode.None;
-        this.m_InputsBinding.m_Player1BindableControls["Fire"] = KeyCode.None;
+        this.m_InputsBinding = InputsBindingDatas.LoadPrefs();
 
-        this.m_InputsBinding.m_Player2BindableControls = this.m_InputsBinding.m_Player1BindableControls;
+        if (this.m_InputsBinding.m_Player1BindableControls.ContainsKey("MoveUp") == false)
+        {
+            this.m_InputsBinding.m_Player1BindableControls["MoveUp"] = KeyCode.Z;
+            this.m_InputsBinding.m_Player1BindableControls["MoveDown"] = KeyCode.S;
+            this.m_InputsBinding.m_Player1BindableControls["Fire"] = KeyCode.Space;
+
+            this.m_InputsBinding.m_Player2BindableControls["MoveUp"] = KeyCode.UpArrow;
+            this.m_InputsBinding.m_Player2BindableControls["MoveDown"] = KeyCode.DownArrow;
+            this.m_InputsBinding.m_Player2BindableControls["Fire"] = KeyCode.Keypad0;
+        }
     }
 
     #endregion
 
     public void Initialize()
     {
+        this.InitializeInputsBinding();
     }
 
     public GlobalDatas()

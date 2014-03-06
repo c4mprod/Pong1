@@ -4,14 +4,20 @@ using System.Collections.Generic;
 
 public class InputsEditor : EditorWindow
 {
+    public class ToogleHelper
+    {
+        public Dictionary<int, bool> m_ToogleIdDictionary = new Dictionary<int, bool>();
+    }
+
     #region "Events"
 
     private event GameManager.CustomEventHandler m_ModifyInputEvent;
 
     #endregion
 
+    private ToogleHelper m_ToogleHelper = new ToogleHelper();
     private Vector2 m_ScrollPosition;
-    private GameManager m_GameManager = null;
+    private int m_TooglePosition;
 
     [MenuItem("Custom/Inputs Editor")]
     public static void Init()
@@ -21,43 +27,30 @@ public class InputsEditor : EditorWindow
         lWindow.minSize = new Vector2(500, 500);
     }
 
-    void OnEnable()
-    {
-        this.m_GameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-
-        this.m_ModifyInputEvent += this.m_GameManager.OnModifyInput;
-    }
-
-    void OnDisable()
-    {
-        this.m_ModifyInputEvent -= this.m_GameManager.OnModifyInput;
-    }
-
     void OnGUI()
     {
+        this.m_TooglePosition = 0;
         this.m_ScrollPosition = EditorGUILayout.BeginScrollView(this.m_ScrollPosition, false, true);
-        //this._datas.levelsHolder.OnGui();
 
-        //EditorGUILayout.Separator();
-        //EditorGUILayout.BeginHorizontal();
-        //{
-        //    if (GUILayout.Button("Save", GUILayout.Width(200f)))
-        //    {
-        //        //    LevelsHolder tmp = this._datas.levelsHolder;
-        //        //    this._datas.levelsHolder.apply();
-        //        //    this._sr = this._factory.Create(SerializerType.XmlSerializer);
+        GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 1 controls");
+        GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 2 controls");
 
-        //        //    this._sr.Serialize<LevelsHolder>(ref tmp, Application.dataPath + GlobalDatas.levelsEditorPrefsPath);
-        //    }
-        //    if (GUILayout.Button("Reset", GUILayout.Width(200f)))
-        //    {
-        //        //LevelsHolder levelsHolder = this._datas.levelsHolder;
+        EditorGUILayout.Separator();
+        EditorGUILayout.BeginHorizontal();
+        {
+            if (GUILayout.Button("Save", GUILayout.Width(200f)))
+            {
+                EditorUtility.SetDirty(GlobalDatas.Instance.m_InputsBinding);
+                InputsBindingDatas lLoadTest = Resources.LoadAssetAtPath<InputsBindingDatas>(InputsBindingDatas.InputsPath);
 
-        //        //this._datas.loadData<LevelsHolder>(ref levelsHolder, GlobalDatas.levelsEditorPrefsPath);
-        //    }
+                if (lLoadTest == null)
+                    AssetDatabase.CreateAsset(GlobalDatas.Instance.m_InputsBinding, InputsBindingDatas.InputsPath);
+                else
+                    AssetDatabase.SaveAssets();
+            }
 
-        //}
-        //EditorGUILayout.EndHorizontal();
-        //EditorGUILayout.EndScrollView();
+        }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndScrollView();
     }
 }

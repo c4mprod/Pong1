@@ -24,11 +24,13 @@ public class Goal : MonoBehaviour
     void OnEnable()
     {
         this.m_GoalEvent += GameManager.Instance.OnGoal;
+        Debug.Log("Goal OnEnable");
     }
 
     void OnDisable()
     {
         this.m_GoalEvent -= GameManager.Instance.OnGoal;
+        Debug.Log("Goal OnDisable");
     }
 
     #endregion

@@ -26,7 +26,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     #endregion
 
-    //private EventManager m_EventManager = new EventManager();
+    private InputsManager m_InputsManager = new InputsManager();
     public float m_BallScoreValue = 1.0f;
     public float m_EnemyScoreValue = 0.2f;
 
@@ -36,6 +36,18 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     void Update()
     {
+        this.m_InputsManager.Update();
+    }
+
+    void FixedUpdate()
+    {
+        this.m_InputsManager.FixedUpdate();
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("GameManager Disable");
+        GoalEvent = null;
     }
 
     #region "Utilities functions"

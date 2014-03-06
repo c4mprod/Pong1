@@ -4,15 +4,15 @@ using System.Collections;
 public class Singleton<T>
     where T : new()
 {
-    private static T m_Instance;
+    private static T DataInstance;
 
     public static T Instance
     {
         get
         {
-            if (m_Instance == null)
-                m_Instance = new T();
-            return m_Instance;
+            if (DataInstance == null)
+                DataInstance = new T();
+            return DataInstance;
         }
     }
 }
