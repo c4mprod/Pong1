@@ -98,7 +98,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         Goal.GoalVO lVO = (Goal.GoalVO)_EventArg;
 
-        if (lVO.m_EPlayer == EPlayer.Player1)
+        if (lVO.m_EPlayer == EPlayer.Player2)
             this.CalculateScore(GlobalDatas.Instance.m_Player1, lVO.m_EGoalHitType);
         else
             this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
