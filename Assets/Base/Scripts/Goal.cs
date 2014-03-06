@@ -5,35 +5,29 @@ using System.Collections.Generic;
 public class Goal : MonoBehaviour
 {
     #region "Events"
+
     private event GameManager.CustomEventHandler m_GoalEvent;
+
     #endregion
 
     #region "EventArgs Value Objects"
+
     public class GoalVO : System.EventArgs
     {
         public GameManager.EPlayer m_EPlayer;
         public GameManager.EGoalHitType m_EGoalHitType;
+
     }
+
     #endregion
 
     public GameManager.EPlayer m_EPlayer;
     private GoalVO m_GoalVO = new GoalVO();
 
-    #region "OnEnable / OnDisable"
-
     void OnEnable()
     {
         this.m_GoalEvent += GameManager.Instance.OnGoal;
-        Debug.Log("Goal OnEnable");
     }
-
-    void OnDisable()
-    {
-        this.m_GoalEvent -= GameManager.Instance.OnGoal;
-        Debug.Log("Goal OnDisable");
-    }
-
-    #endregion
 
     void Awake()
     {

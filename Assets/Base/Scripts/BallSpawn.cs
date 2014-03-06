@@ -35,11 +35,6 @@ public class BallSpawn : MonoBehaviour
         GameManager.GoalEvent += OnSpawn;
     }
 
-    void OnDisable()
-    {
-        GameManager.GoalEvent -= OnSpawn;
-    }
-
     #endregion
 
     #region "Events functions"

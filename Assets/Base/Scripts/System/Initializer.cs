@@ -6,13 +6,18 @@ public class Initializer : MonoBehaviour
     public string m_StartScene = "Game";
     public float m_BallScoreValue = 1.0f;
     public float m_EnemyScoreValue = 0.2f;
+    public float m_ShootDelay = 1.0f;
 
 	void Awake() 
 	{
         DontDestroyOnLoad(this.gameObject);
+
         GameManager.Instance.transform.parent = this.transform;
+
         GameManager.Instance.m_BallScoreValue = this.m_BallScoreValue;
         GameManager.Instance.m_EnemyScoreValue = this.m_EnemyScoreValue;
+        GameManager.Instance.m_ShootDelay = this.m_ShootDelay;
+
         Application.LoadLevel(this.m_StartScene);
 	}
 }

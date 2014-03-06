@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
@@ -7,6 +8,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public enum EPlayer
     {
+        None,
         Player1,
         Player2
     }
@@ -23,15 +25,22 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public delegate void CustomEventHandler(Object _Obj, System.EventArgs _EArgs);
     public static event CustomEventHandler GoalEvent;
+    public static event CustomEventHandler MoveUpEvent;
+    public static event CustomEventHandler MoveDownEvent;
+    public static event CustomEventHandler ShootEvent;
 
     #endregion
 
-    private InputsManager m_InputsManager = new InputsManager();
     public float m_BallScoreValue = 1.0f;
     public float m_EnemyScoreValue = 0.2f;
+    public float m_ShootDelay = 1.0f;
 
-    void Start()
+    private InputsManager m_InputsManager = null;
+    private bool m_CanShoot = true;
+
+    void Awake()
     {
+        this.m_InputsManager = new InputsManager();
     }
 
     void Update()
@@ -46,7 +55,6 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     void OnDisable()
     {
-        Debug.Log("GameManager Disable");
         GoalEvent = null;
     }
 
@@ -69,6 +77,19 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
+    private IEnumerator ShootTimerCoroutine()
+    {
+        float lTimer = 0.0f;
+
+        this.m_CanShoot = false;
+        while (lTimer < this.m_ShootDelay)
+        {
+            yield return new WaitForEndOfFrame();
+            lTimer += Time.deltaTime;
+        }
+        this.m_CanShoot = true;
+    }
+
     #endregion
 
     #region "Events functions"
@@ -83,13 +104,29 @@ public class GameManager : SingletonBehaviour<GameManager>
             this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
 
         GameManager.GoalEvent(this, lVO);
-        Debug.Log("Player1 Score : " + GlobalDatas.Instance.m_Player1.m_Score);
-        Debug.Log("Player2 Score : " + GlobalDatas.Instance.m_Player2.m_Score);
+        //Debug.Log("Player1 Score : " + GlobalDatas.Instance.m_Player1.m_Score);
+        //Debug.Log("Player2 Score : " + GlobalDatas.Instance.m_Player2.m_Score);
     }
 
-    public void OnModifyInput(Object _Obj, System.EventArgs _EventArg)
+    public void OnPlayerMoveUp(Object _Obj, System.EventArgs _EventArg)
     {
+        GameManager.MoveUpEvent(_Obj, _EventArg);
     }
+
+    public void OnPlayerMoveDown(Object _Obj, System.EventArgs _EventArg)
+    {
+        GameManager.MoveDownEvent(_Obj, _EventArg);
+    }
+
+    public void OnPlayerShoot(Object _Obj, System.EventArgs _EventArg)
+    {
+        if (this.m_CanShoot)
+        {
+            StartCoroutine("ShootTimerCoroutine");
+            GameManager.ShootEvent(_Obj, _EventArg);
+        }
+    }
+
 
     #endregion
 }

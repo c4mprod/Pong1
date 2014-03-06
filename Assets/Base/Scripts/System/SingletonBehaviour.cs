@@ -11,9 +11,8 @@ public class SingletonBehaviour<T> : MonoBehaviour
     {
         get
         {
-            if (DataInstance == null && !IsDestroyed)
+            if ((DataInstance = GameObject.FindObjectOfType<T>()) == null)
             {
-                Debug.Log("Create SingleBehaviour");
                 DataInstance = new GameObject("SingletonBehaviour<" + typeof(T).ToString() + ">").AddComponent<T>();
                 DontDestroyOnLoad(DataInstance);
             }
