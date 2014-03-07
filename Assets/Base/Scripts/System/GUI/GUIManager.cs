@@ -49,6 +49,7 @@ public class GUIManager : MonoBehaviour
     {
         GameManager.WinnerVO lWinnerVO = (GameManager.WinnerVO)_EventArg;
 
+        // The player sent is the winner.
         this.m_RoundEndMsg = (lWinnerVO.m_EPlayer == GameManager.EPlayer.Player1)
             ? "Player 1 Win" : "Player 2 Win";
     }
@@ -93,13 +94,4 @@ public class GUIManager : MonoBehaviour
                 break;
         }
     }
-
-    #region "Events functions"
-
-    public void OnGoal(Object _Obj, System.EventArgs _EventArg)
-    {
-
-    }
-
-    #endregion
 }

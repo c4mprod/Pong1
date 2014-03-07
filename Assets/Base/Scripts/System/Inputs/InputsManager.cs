@@ -100,4 +100,22 @@ public class InputsManager : IUpdateBehaviour
             }
         }
     }
+
+    public void ResetInputs()
+    {
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
+        {
+            this.m_Player1Inputs[lPair.Key] = false;
+        }
+
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
+        {
+            this.m_Player2Inputs[lPair.Key] = false;
+        }
+
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_UnbindableControls)
+        {
+            this.m_UnbindableInputs[lPair.Key] = false;
+        }
+    }
 }

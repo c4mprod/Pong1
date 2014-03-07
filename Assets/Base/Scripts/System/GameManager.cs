@@ -106,20 +106,20 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     void Update()
     {
+        this.m_InputsManager.Update();
     }
 
     void FixedUpdate()
     {
-        if (this.m_DataCurrentState != State.RoundStart)
-            this.m_InputsManager.FixedUpdate();
+        this.m_InputsManager.FixedUpdate();
     }
 
     void OnDisable()
     {
-        GoalEvent = null;
-        MoveUpEvent = null;
-        MoveDownEvent = null;
-        ShootEvent = null;
+        GameManager.GoalEvent = null;
+        GameManager.MoveUpEvent = null;
+        GameManager.MoveDownEvent = null;
+        GameManager.ShootEvent = null;
     }
 
     #region "States coroutines"
@@ -133,7 +133,7 @@ public class GameManager : SingletonBehaviour<GameManager>
             this.m_DataStartTimer -= Time.deltaTime;
             yield return null;
         }
-        SpawnEvent(this, null);
+        GameManager.SpawnEvent(this, null);
         this.ChangeState(State.RoundRun);
     }
 
@@ -141,8 +141,9 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         while (this.m_DataCurrentState == State.RoundRun)
         {
-            this.m_InputsManager.Update();
             GlobalDatas.Instance.m_LevelDatas.m_CurrentTime += Time.deltaTime;
+
+            // When the score limit is reach, a Round End Event is trigged with the player who win.
 
             if (this.IsScoreLimitReach())
             {
@@ -188,6 +189,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void ChangeState(State _NewState)
     {
+        this.m_InputsManager.ResetInputs();
         if (_NewState != this.m_DataCurrentState)
         {
             this.m_DataCurrentState = _NewState;
@@ -252,56 +254,75 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void OnQuit(Object _Obj, System.EventArgs _EventArg)
     {
-        Application.Quit();
+        if (this.m_CurrentState == State.Pause)
+        {
+            Application.Quit();
+        }
     }
 
     public void OnContinue(Object _Obj, System.EventArgs _EventArg)
     {
-        Time.timeScale = this.m_TimeScaleSave;
-        this.ChangeState(State.RoundRun);
+        if (this.m_CurrentState == State.Pause)
+        {
+            Time.timeScale = this.m_TimeScaleSave;
+            this.ChangeState(State.RoundRun);
+        }
     }
 
     public void OnPause(Object _Obj, System.EventArgs _EventArg)
     {
-        this.ChangeState(State.Pause);
+        if (this.m_CurrentState == State.RoundRun)
+        {
+            this.ChangeState(State.Pause);
+        }
     }
 
     public void OnGoal(Object _Obj, System.EventArgs _EventArg)
     {
-        Goal.GoalVO lVO = (Goal.GoalVO)_EventArg;
-
-        /**
-         ** If the player 2 goal is hit, the player 1 win points.
-         **/
-
-        if (lVO.m_EPlayer == EPlayer.Player2)
-            this.CalculateScore(GlobalDatas.Instance.m_Player1, lVO.m_EGoalHitType);
-        else
-            this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
-
         if (this.m_CurrentState == State.RoundRun)
+        {
+            Goal.GoalVO lVO = (Goal.GoalVO)_EventArg;
+
+            /**
+             ** If the player 2 goal is hit, the player 1 win points.
+             **/
+
+            if (lVO.m_EPlayer == EPlayer.Player2)
+                this.CalculateScore(GlobalDatas.Instance.m_Player1, lVO.m_EGoalHitType);
+            else
+                this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
+
             GameManager.GoalEvent(this, lVO);
+        }
     }
 
     public void OnPlayerMoveUp(Object _Obj, System.EventArgs _EventArg)
     {
-        GameManager.MoveUpEvent(_Obj, _EventArg);
+        if (this.m_CurrentState == State.RoundRun)
+        {
+            GameManager.MoveUpEvent(_Obj, _EventArg);
+        }
     }
 
     public void OnPlayerMoveDown(Object _Obj, System.EventArgs _EventArg)
     {
-        GameManager.MoveDownEvent(_Obj, _EventArg);
+        if (this.m_CurrentState == State.RoundRun)
+        {
+            GameManager.MoveDownEvent(_Obj, _EventArg);
+        }
     }
 
     public void OnPlayerShoot(Object _Obj, System.EventArgs _EventArg)
     {
-        if (this.m_CanShoot)
+        if (this.m_CurrentState == State.RoundRun)
         {
-            StartCoroutine("ShootTimerCoroutine");
-            GameManager.ShootEvent(_Obj, _EventArg);
+            if (this.m_CanShoot)
+            {
+                StartCoroutine("ShootTimerCoroutine");
+                GameManager.ShootEvent(_Obj, _EventArg);
+            }
         }
     }
-
 
     #endregion
 }

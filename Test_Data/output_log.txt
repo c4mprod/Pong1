@@ -11,13 +11,31 @@ Platform assembly: E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll (this message 
 Loading E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.052 seconds
+- Completed reload, in  0.045 seconds
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 0.247610 ms
+UnloadTime: 0.319883 ms
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 151.
-Total: 0.380182 ms (FindLiveObjects: 0.011546 ms CreateObjectMapping: 0.005987 ms MarkObjects: 0.063720 ms  DeleteObjects: 0.005131 ms)
+Total: 0.645754 ms (FindLiveObjects: 0.015395 ms CreateObjectMapping: 0.009408 ms MarkObjects: 0.112900 ms  DeleteObjects: 0.005131 ms)
+
+HandleD3DDeviceLost
+  HandleD3DDeviceLost: needs reset, doing it
+FullResetD3DDevice
+ResetD3DDevice
+dev->Reset
+D3Dwindow device not lost anymore
+HandleD3DDeviceLost
+  HandleD3DDeviceLost: needs reset, doing it
+FullResetD3DDevice
+ResetD3DDevice
+dev->Reset
+D3Dwindow device not lost anymore
+UnloadTime: 1.480959 ms
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 185.
+Total: 0.444330 ms (FindLiveObjects: 0.007697 ms CreateObjectMapping: 0.005987 ms MarkObjects: 0.120597 ms  DeleteObjects: 0.002138 ms)
 
