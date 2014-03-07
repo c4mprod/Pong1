@@ -5,7 +5,6 @@ public class SingletonBehaviour<T> : MonoBehaviour
     where T : MonoBehaviour
 {
     private static T DataInstance = null;
-    private static bool IsDestroyed = false;
 
     public static T Instance
     {
@@ -27,10 +26,5 @@ public class SingletonBehaviour<T> : MonoBehaviour
             Destroy(DataInstance);
             DataInstance = null;
         }
-    }
-
-    void OnDestroy()
-    {
-        IsDestroyed = true;
     }
 }

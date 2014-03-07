@@ -9,12 +9,6 @@ public class InputsEditor : EditorWindow
         public Dictionary<int, bool> m_ToogleIdDictionary = new Dictionary<int, bool>();
     }
 
-    #region "Events"
-
-    private event GameManager.CustomEventHandler m_ModifyInputEvent;
-
-    #endregion
-
     private ToogleHelper m_ToogleHelper = new ToogleHelper();
     private Vector2 m_ScrollPosition;
     private int m_TooglePosition;

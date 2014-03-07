@@ -6,6 +6,15 @@ public class GameManager : SingletonBehaviour<GameManager>
 {
     #region "Enumerations"
 
+    public enum State
+    {
+        None,
+        RoundStart,
+        RoundRun,
+        RoundEnd,
+        Pause
+    }
+
     public enum EPlayer
     {
         None,
@@ -37,26 +46,91 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private InputsManager m_InputsManager = null;
     private bool m_CanShoot = true;
+    private State m_CurrentState;
 
     void Awake()
     {
         this.m_InputsManager = new InputsManager();
+        this.m_CurrentState = State.None;
+        this.ChangeState(State.RoundRun);
     }
 
     void Update()
     {
-        this.m_InputsManager.Update();
     }
 
     void FixedUpdate()
     {
-        this.m_InputsManager.FixedUpdate();
+        if (this.m_CurrentState == State.RoundRun)
+            this.m_InputsManager.FixedUpdate();
     }
 
     void OnDisable()
     {
         GoalEvent = null;
+        MoveUpEvent = null;
+        MoveDownEvent = null;
+        ShootEvent = null;
     }
+
+    #region "States coroutines"
+
+    IEnumerator RoundStartState()
+    {
+        while (this.m_CurrentState == State.RoundStart)
+        {
+            yield return null;
+        }
+    }
+
+    IEnumerator RoundRunState()
+    {
+        while (this.m_CurrentState == State.RoundRun)
+        {
+            this.m_InputsManager.Update();
+            yield return null;
+        }
+    }
+
+    IEnumerator RoundEndState()
+    {
+        while (this.m_CurrentState == State.RoundEnd)
+        {
+            yield return null;
+        }
+    }
+
+    IEnumerator PauseState()
+    {
+        while (this.m_CurrentState == State.Pause)
+        {
+            yield return null;
+        }
+    }
+
+    #endregion
+
+    #region "States functions"
+
+    private void ChangeState(State _NewState)
+    {
+        if (_NewState != this.m_CurrentState)
+        {
+            this.m_CurrentState = _NewState;
+            string lMethodName = _NewState.ToString() + "State";
+
+            /**
+             ** We invoke the proper non public coroutine's instance associate with the new state's name
+             ** by C# reflection.
+             **/
+            System.Reflection.MethodInfo lMethodInfos =
+                this.GetType().GetMethod(lMethodName, System.Reflection.BindingFlags.NonPublic
+                | System.Reflection.BindingFlags.Instance);
+            StartCoroutine((IEnumerator)lMethodInfos.Invoke(this, null));
+        }
+    }
+
+    #endregion
 
     #region "Utilities functions"
 
@@ -98,14 +172,16 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         Goal.GoalVO lVO = (Goal.GoalVO)_EventArg;
 
+        /**
+         ** If the player 2 goal is hit, the player 1 win points.
+         **/
+
         if (lVO.m_EPlayer == EPlayer.Player2)
             this.CalculateScore(GlobalDatas.Instance.m_Player1, lVO.m_EGoalHitType);
         else
             this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
 
         GameManager.GoalEvent(this, lVO);
-        //Debug.Log("Player1 Score : " + GlobalDatas.Instance.m_Player1.m_Score);
-        //Debug.Log("Player2 Score : " + GlobalDatas.Instance.m_Player2.m_Score);
     }
 
     public void OnPlayerMoveUp(Object _Obj, System.EventArgs _EventArg)
