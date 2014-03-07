@@ -25,6 +25,8 @@ public class Initializer : MonoBehaviour
         GameManager.Instance.m_ScoreLimit = this.m_ScoreLimit;
         GameManager.Instance.m_RoundEndTimerDelay = this.m_RoundEndTimerDelay;
 
+        Destroy(this);
+
         Application.LoadLevel(this.m_StartScene);
 	}
 }

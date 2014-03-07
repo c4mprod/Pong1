@@ -67,9 +67,14 @@ public class GUIManager : MonoBehaviour
 
             case GameManager.State.RoundRun:
                 {
+                    int lMinutes = Mathf.FloorToInt(GlobalDatas.Instance.m_LevelDatas.m_CurrentTime / 60.0f);
+                    int lSeconds = Mathf.FloorToInt(GlobalDatas.Instance.m_LevelDatas.m_CurrentTime - lMinutes * 60);
+
+                    string lFormatedTime = string.Format("{0:0}:{1:00}", lMinutes, lSeconds);
+
                     GUI.Label(this.m_Player1Rect, "<size=40> Score : " + GlobalDatas.Instance.m_Player1.m_Score + "</size>");
                     GUI.Label(this.m_Player2Rect, "<size=40> Score : " + GlobalDatas.Instance.m_Player2.m_Score + "</size>");
-                    GUI.Label(this.m_RoundRunTimerRect, "<size=40> Time : " + (int)GlobalDatas.Instance.m_LevelDatas.m_CurrentTime+ "</size>");
+                    GUI.Label(this.m_RoundRunTimerRect, "<size=40> Time : " + lFormatedTime + "</size>");
                   
                     break;
                 }

@@ -190,6 +190,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     private void ChangeState(State _NewState)
     {
         this.m_InputsManager.ResetInputs();
+
         if (_NewState != this.m_DataCurrentState)
         {
             this.m_DataCurrentState = _NewState;
