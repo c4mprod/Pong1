@@ -8,6 +8,7 @@ public class InputsManager : IUpdateBehaviour
     public static event GameManager.CustomEventHandler MoveUpEvent;
     public static event GameManager.CustomEventHandler MoveDownEvent;
     public static event GameManager.CustomEventHandler ShootEvent;
+    public static event GameManager.CustomEventHandler PauseEvent;
 
     #endregion
 
@@ -31,10 +32,12 @@ public class InputsManager : IUpdateBehaviour
         MoveUpEvent += GameManager.Instance.OnPlayerMoveUp;
         MoveDownEvent += GameManager.Instance.OnPlayerMoveDown;
         ShootEvent += GameManager.Instance.OnPlayerShoot;
+        PauseEvent += GameManager.Instance.OnPause;
 
         this.m_ControlsEvents["MoveUp"] = MoveUpEvent;
         this.m_ControlsEvents["MoveDown"] = MoveDownEvent;
         this.m_ControlsEvents["Shoot"] = ShootEvent;
+        this.m_ControlsEvents["Pause"] = PauseEvent;
 
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
             this.m_Player1Inputs[lPair.Key] = false;

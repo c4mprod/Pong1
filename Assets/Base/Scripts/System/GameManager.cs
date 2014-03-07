@@ -64,6 +64,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     private InputsManager m_InputsManager = null;
     private bool m_CanShoot = true;
     private WinnerVO m_Winner = new WinnerVO();
+    private float m_TimeScaleSave = Time.timeScale;
 
     private State m_DataCurrentState;
     public State m_CurrentState
@@ -95,17 +96,12 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     #endregion
 
-    void OnEnable()
+    void Awake()
     {
         this.m_DataStartTimer = this.m_StartTimerDelay;
         this.m_InputsManager = new InputsManager();
         this.m_DataCurrentState = State.None;
-    }
-
-    void Awake()
-    {
-        if (this.m_CurrentState == State.None)
-            this.ChangeState(State.RoundStart);
+        this.ChangeState(State.RoundStart);
     }
 
     void Update()
@@ -179,6 +175,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     IEnumerator PauseState()
     {
+        Time.timeScale = 0.0f;
         while (this.m_DataCurrentState == State.Pause)
         {
             yield return null;
@@ -252,6 +249,22 @@ public class GameManager : SingletonBehaviour<GameManager>
     #endregion
 
     #region "Events functions"
+
+    public void OnQuit(Object _Obj, System.EventArgs _EventArg)
+    {
+        Application.Quit();
+    }
+
+    public void OnContinue(Object _Obj, System.EventArgs _EventArg)
+    {
+        Time.timeScale = this.m_TimeScaleSave;
+        this.ChangeState(State.RoundRun);
+    }
+
+    public void OnPause(Object _Obj, System.EventArgs _EventArg)
+    {
+        this.ChangeState(State.Pause);
+    }
 
     public void OnGoal(Object _Obj, System.EventArgs _EventArg)
     {

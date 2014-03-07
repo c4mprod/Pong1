@@ -44,10 +44,10 @@ public class InputsEditor : EditorWindow
             if (GUILayout.Button("Save", GUILayout.Width(200f)))
             {
                 EditorUtility.SetDirty(GlobalDatas.Instance.m_InputsBinding);
-                InputsBindingDatas lLoadTest = Resources.LoadAssetAtPath<InputsBindingDatas>(InputsBindingDatas.InputsPath);
+                InputsDatas lLoadTest = Resources.LoadAssetAtPath<InputsDatas>(InputsDatas.InputsPath);
 
                 if (lLoadTest == null)
-                    AssetDatabase.CreateAsset(GlobalDatas.Instance.m_InputsBinding, InputsBindingDatas.InputsPath);
+                    AssetDatabase.CreateAsset(GlobalDatas.Instance.m_InputsBinding, InputsDatas.InputsPath);
                 else
                     AssetDatabase.SaveAssets();
             }

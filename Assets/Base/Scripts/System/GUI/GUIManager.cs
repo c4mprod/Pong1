@@ -3,11 +3,20 @@ using System.Collections.Generic;
 
 public class GUIManager : MonoBehaviour
 {
+    #region "Events"
+
+    public static event GameManager.CustomEventHandler ContinueEvent;
+    public static event GameManager.CustomEventHandler QuitEvent;
+
+    #endregion
+
     #region "GUI Rect"
 
     private Rect m_Player1Rect;
     private Rect m_Player2Rect;
     private Rect m_RoundRunTimerRect;
+    private Rect m_ContinueButton;
+    private Rect m_QuitButon;
 
     #endregion
 
@@ -18,11 +27,22 @@ public class GUIManager : MonoBehaviour
         this.m_Player1Rect = new Rect(0, 0, 200, 200);
         this.m_Player2Rect = new Rect(Screen.width - 250, 0, 500, 500);
         this.m_RoundRunTimerRect = new Rect(Screen.width / 2 - 100, 0, 500, 500);
+        this.m_ContinueButton = new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 100, 20);
+        this.m_QuitButon = new Rect(Screen.width / 2 - 50, Screen.height / 2 - 20, 100, 20);
     }
 
     void OnEnable()
     {
+        GUIManager.ContinueEvent += GameManager.Instance.OnContinue;
+        GUIManager.QuitEvent += GameManager.Instance.OnQuit;
         GameManager.RoundEndEvent += this.RoundEnd;
+    }
+
+    void OnDisable()
+    {
+        GUIManager.ContinueEvent -= GameManager.Instance.OnContinue;
+        GUIManager.QuitEvent -= GameManager.Instance.OnQuit;
+        GameManager.RoundEndEvent -= this.RoundEnd;
     }
 
     private void RoundEnd(Object _Obj, System.EventArgs _EventArg)
@@ -57,6 +77,15 @@ public class GUIManager : MonoBehaviour
                 {
                     GUI.Label(this.m_RoundRunTimerRect, "<size=40>" + this.m_RoundEndMsg + "</size>");
               
+                    break;
+                }
+
+            case GameManager.State.Pause:
+                {
+                    if (GUI.Button(this.m_ContinueButton, "Continue"))
+                        GUIManager.ContinueEvent(this, null);
+                    if (GUI.Button(this.m_QuitButon, "Quit"))
+                        GUIManager.QuitEvent(this, null);
                     break;
                 }
 
