@@ -126,6 +126,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     IEnumerator RoundStartState()
     {
+        GlobalDatas.Instance.m_LevelDatas.m_CurrentTime = 0.0f;
         this.m_DataStartTimer = this.m_StartTimerDelay;
         while (this.m_DataCurrentState == State.RoundStart
             && this.m_DataStartTimer > 0.0f)
@@ -143,8 +144,9 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             GlobalDatas.Instance.m_LevelDatas.m_CurrentTime += Time.deltaTime;
 
-            // When the score limit is reach, a Round End Event is trigged with the player who win.
-
+            /**
+             ** When the score limit is reach, a Round End Event is trigged with the player who win.
+             **/
             if (this.IsScoreLimitReach())
             {
                 this.m_Winner.m_EPlayer =

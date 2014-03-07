@@ -56,47 +56,33 @@ public class GUIManager : MonoBehaviour
 
     void OnGUI()
     {
-        switch (GameManager.Instance.m_CurrentState)
+        if (GameManager.Instance.m_CurrentState == GameManager.State.RoundStart)
         {
-            case GameManager.State.RoundStart:
-                {
-                    GUI.Label(this.m_RoundRunTimerRect, "<size=40> Start in : " + (int)GameManager.Instance.m_StartTimer + "</size>");
-              
-                    break;
-                }
+            GUI.Label(this.m_RoundRunTimerRect, "<size=40> Start in : " + (int)GameManager.Instance.m_StartTimer + "</size>");
+        }
+        if (GameManager.Instance.m_CurrentState == GameManager.State.RoundRun
+            || GameManager.Instance.m_CurrentState == GameManager.State.Pause)
+        {
+            int lMinutes = Mathf.FloorToInt(GlobalDatas.Instance.m_LevelDatas.m_CurrentTime / 60.0f);
+            int lSeconds = Mathf.FloorToInt(GlobalDatas.Instance.m_LevelDatas.m_CurrentTime - lMinutes * 60);
 
-            case GameManager.State.RoundRun:
-                {
-                    int lMinutes = Mathf.FloorToInt(GlobalDatas.Instance.m_LevelDatas.m_CurrentTime / 60.0f);
-                    int lSeconds = Mathf.FloorToInt(GlobalDatas.Instance.m_LevelDatas.m_CurrentTime - lMinutes * 60);
+            string lFormatedTime = string.Format("{0:0}:{1:00}", lMinutes, lSeconds);
 
-                    string lFormatedTime = string.Format("{0:0}:{1:00}", lMinutes, lSeconds);
+            GUI.Label(this.m_Player1Rect, "<size=40> Score : " + GlobalDatas.Instance.m_Player1.m_Score + "</size>");
+            GUI.Label(this.m_Player2Rect, "<size=40> Score : " + GlobalDatas.Instance.m_Player2.m_Score + "</size>");
+            GUI.Label(this.m_RoundRunTimerRect, "<size=40> Time : " + lFormatedTime + "</size>");
 
-                    GUI.Label(this.m_Player1Rect, "<size=40> Score : " + GlobalDatas.Instance.m_Player1.m_Score + "</size>");
-                    GUI.Label(this.m_Player2Rect, "<size=40> Score : " + GlobalDatas.Instance.m_Player2.m_Score + "</size>");
-                    GUI.Label(this.m_RoundRunTimerRect, "<size=40> Time : " + lFormatedTime + "</size>");
-                  
-                    break;
-                }
-
-            case GameManager.State.RoundEnd:
-                {
-                    GUI.Label(this.m_RoundRunTimerRect, "<size=40>" + this.m_RoundEndMsg + "</size>");
-              
-                    break;
-                }
-
-            case GameManager.State.Pause:
-                {
-                    if (GUI.Button(this.m_ContinueButton, "Continue"))
-                        GUIManager.ContinueEvent(this, null);
-                    if (GUI.Button(this.m_QuitButon, "Quit"))
-                        GUIManager.QuitEvent(this, null);
-                    break;
-                }
-
-            default:
-                break;
+        }
+        if (GameManager.Instance.m_CurrentState == GameManager.State.RoundEnd)
+        {
+            GUI.Label(this.m_RoundRunTimerRect, "<size=40>" + this.m_RoundEndMsg + "</size>");
+        }
+        if (GameManager.Instance.m_CurrentState == GameManager.State.Pause)
+        {
+            if (GUI.Button(this.m_ContinueButton, "Continue"))
+                GUIManager.ContinueEvent(this, null);
+            if (GUI.Button(this.m_QuitButon, "Quit"))
+                GUIManager.QuitEvent(this, null);
         }
     }
 }
