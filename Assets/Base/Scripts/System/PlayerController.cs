@@ -25,6 +25,13 @@ public class PlayerController : MonoBehaviour
         GameManager.ShootEvent += this.OnShoot;
     }
 
+    void OnDisable()
+    {
+        GameManager.MoveUpEvent -= this.OnMoveUp;
+        GameManager.MoveDownEvent -= this.OnMoveDown;
+        GameManager.ShootEvent -= this.OnShoot;
+    }
+
     public void OnMoveUp(Object _Obj, System.EventArgs _EventArg)
     {
         InputsManager.InputsVO lInputsVO = (InputsManager.InputsVO)_EventArg;

@@ -8,30 +8,11 @@ public class GlobalDatas : Singleton<GlobalDatas>
 {
     #region "Datas"
 
-    public PlayerDatas m_Player1 = new PlayerDatas();
-    public PlayerDatas m_Player2 = new PlayerDatas();
+    public PlayerDatas m_Player1;
+    public PlayerDatas m_Player2;
+    public LevelDatas m_LevelDatas;
     public InputsBindingDatas m_InputsBinding;
 
-    #endregion
-
-    #region "Data loads"
-    //public void LoadData<T>(ref T _Data, string _Path)
-    //    where T : new()
-    //{
-    //    try
-    //    {
-    //        Debug.LogError("UNSERIALIZE : " + Application.dataPath + _Path);
-    //        this.m_Sr.Unserialize<T>(ref _Data, Application.dataPath + _Path);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        Debug.LogError("Cannot load : " + e.Message);
-    //        if (_Data == null)
-    //        {
-    //            _Data = new T();
-    //        }
-    //    }
-    //}
     #endregion
 
     #region "Data Initializations"
@@ -56,7 +37,16 @@ public class GlobalDatas : Singleton<GlobalDatas>
 
     public void Initialize()
     {
+        this.m_Player1 = new PlayerDatas();
+        this.m_Player2 = new PlayerDatas();
+        this.m_LevelDatas = new LevelDatas();
         this.InitializeInputsBinding();
+    }
+
+    public void ResetScore()
+    {
+        this.m_Player1.m_Score = 0.0f;
+        this.m_Player2.m_Score = 0.0f;
     }
 
     public GlobalDatas()

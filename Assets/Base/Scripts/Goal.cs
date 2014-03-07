@@ -29,6 +29,11 @@ public class Goal : MonoBehaviour
         this.m_GoalEvent += GameManager.Instance.OnGoal;
     }
 
+    void OnDisable()
+    {
+        this.m_GoalEvent -= GameManager.Instance.OnGoal;
+    }
+
     void Awake()
     {
         this.m_GoalVO.m_EPlayer = this.m_EPlayer;

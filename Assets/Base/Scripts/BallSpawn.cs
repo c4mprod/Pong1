@@ -11,9 +11,8 @@ public class BallSpawn : MonoBehaviour
     public Vector2 m_SpawnAngle;
     [Range(0.0f, 100.0f)]
     public float m_SpawnForceSpeed = 1.0f;
-    private bool m_Spawn = true;
     // The instance of the ball prefab.
-    private GameObject m_BallInstance;
+    private GameObject m_BallInstance = null;
 
     void Awake()
     {
@@ -24,15 +23,32 @@ public class BallSpawn : MonoBehaviour
 
     void Start()
     {
-        this.m_BallInstance = (GameObject)Instantiate(this.m_Ball, this.transform.position, Quaternion.identity);
-        this.m_BallInstance.transform.parent = this.transform.parent;
+    }
+
+    private void Spawn()
+    {
+        if (this.m_BallInstance == null)
+        {
+            this.m_BallInstance = (GameObject)Instantiate(this.m_Ball, this.transform.position, Quaternion.identity);
+            this.m_BallInstance.transform.parent = this.transform.parent;
+        }
+        this.m_BallInstance.transform.position = this.transform.position;
+        this.m_BallInstance.transform.rotation = Quaternion.identity;
+        this.m_BallInstance.rigidbody2D.velocity = this.m_SpawnForce.normalized * this.m_SpawnForceSpeed;
     }
 
     #region "OnEnable / OnDisable"
 
     void OnEnable()
     {
-        GameManager.GoalEvent += OnSpawn;
+        GameManager.GoalEvent += OnGoal;
+        GameManager.SpawnEvent += OnSpawn;
+    }
+
+    void OnDisable()
+    {
+        GameManager.GoalEvent -= OnGoal;
+        GameManager.SpawnEvent -= OnSpawn;
     }
 
     #endregion
@@ -41,30 +57,32 @@ public class BallSpawn : MonoBehaviour
 
     void OnSpawn(Object _Obj, System.EventArgs _EventArg)
     {
-        Goal.GoalVO lGoalVO = (Goal.GoalVO)_EventArg;
-
-        this.m_BallInstance.transform.position = this.transform.position;
-        this.m_BallInstance.transform.rotation = Quaternion.identity;
-
-        // Set the ball spawn direction to the goaling player.
-        if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player2)
-            || (this.m_SpawnForce.x < 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1))
-            this.m_SpawnForce.x *= -1;
-
-        this.m_BallInstance.rigidbody2D.velocity = this.m_SpawnForce.normalized * this.m_SpawnForceSpeed;
-        this.m_Spawn = false;
+        this.Spawn();
     }
 
-    #endregion
-
-    void Update()
+    void OnGoal(Object _Obj, System.EventArgs _EventArg)
     {
-        if (this.m_Spawn)
+        Goal.GoalVO lGoalVO = (Goal.GoalVO)_EventArg;
+
+        if (GameManager.Instance.IsScoreLimitReach())
+        {
+            if (this.m_BallInstance != null)
+                Destroy(this.m_BallInstance.gameObject);
+            this.m_BallInstance = null;
+        }
+        else
         {
             this.m_BallInstance.transform.position = this.transform.position;
             this.m_BallInstance.transform.rotation = Quaternion.identity;
-            this.m_BallInstance.rigidbody2D.velocity = this.m_SpawnForce.normalized * this.m_SpawnForceSpeed;
-            this.m_Spawn = false;
+
+            // Set the ball spawn direction to the goaling player.
+            if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player2)
+                || (this.m_SpawnForce.x < 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1))
+                this.m_SpawnForce.x *= -1;
+
+            this.Spawn();
         }
     }
+
+    #endregion
 }

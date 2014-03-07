@@ -11,37 +11,13 @@ Platform assembly: E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll (this message 
 Loading E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.046 seconds
+- Completed reload, in  0.047 seconds
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-Create SingleBehaviour
- 
-(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
-
-UnloadTime: 0.337417 ms
-Goal OnEnable
- 
-(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
-
-Goal OnEnable
- 
-(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
-
+UnloadTime: 0.246327 ms
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 155.
-Total: 0.467851 ms (FindLiveObjects: 0.016250 ms CreateObjectMapping: 0.009835 ms MarkObjects: 0.127867 ms  DeleteObjects: 0.004704 ms)
-
-GameManager Disable
- 
-(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
-
-Goal OnDisable
- 
-(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
-
-Goal OnDisable
- 
-(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 162.
+Total: 0.376761 ms (FindLiveObjects: 0.011118 ms CreateObjectMapping: 0.006414 ms MarkObjects: 0.061154 ms  DeleteObjects: 0.004704 ms)
 

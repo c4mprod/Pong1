@@ -33,26 +33,79 @@ public class GameManager : SingletonBehaviour<GameManager>
     #region "Events"
 
     public delegate void CustomEventHandler(Object _Obj, System.EventArgs _EArgs);
+    public static event CustomEventHandler SpawnEvent;
     public static event CustomEventHandler GoalEvent;
     public static event CustomEventHandler MoveUpEvent;
     public static event CustomEventHandler MoveDownEvent;
     public static event CustomEventHandler ShootEvent;
+    public static event CustomEventHandler RoundEndEvent;
 
     #endregion
 
+    #region "EventArgs Value Objects"
+
+    public class WinnerVO : System.EventArgs
+    {
+        public GameManager.EPlayer m_EPlayer;
+    }
+
+    #endregion
+
+    #region "Member variables"
+
+    public string m_StartScene = "Game";
     public float m_BallScoreValue = 1.0f;
     public float m_EnemyScoreValue = 0.2f;
     public float m_ShootDelay = 1.0f;
+    public float m_StartTimerDelay = 5.0f;
+    public float m_RoundEndTimerDelay = 5.0f;
+    public int m_ScoreLimit = 5;
 
     private InputsManager m_InputsManager = null;
     private bool m_CanShoot = true;
-    private State m_CurrentState;
+    private WinnerVO m_Winner = new WinnerVO();
+
+    private State m_DataCurrentState;
+    public State m_CurrentState
+    {
+        get
+        {
+            return this.m_DataCurrentState;
+        }
+    }
+
+    private float m_DataStartTimer = 1.0f;
+    public float m_StartTimer
+    {
+        get
+        {
+            return this.m_DataStartTimer;
+        }
+    }
+
+    private float m_DataRounEndTimer = 1.0f;
+    public float m_RoundEndTimer
+    {
+        get
+        {
+            return this.m_DataRounEndTimer;
+        }
+    }
+
+
+    #endregion
+
+    void OnEnable()
+    {
+        this.m_DataStartTimer = this.m_StartTimerDelay;
+        this.m_InputsManager = new InputsManager();
+        this.m_DataCurrentState = State.None;
+    }
 
     void Awake()
     {
-        this.m_InputsManager = new InputsManager();
-        this.m_CurrentState = State.None;
-        this.ChangeState(State.RoundRun);
+        if (this.m_CurrentState == State.None)
+            this.ChangeState(State.RoundStart);
     }
 
     void Update()
@@ -61,7 +114,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     void FixedUpdate()
     {
-        if (this.m_CurrentState == State.RoundRun)
+        if (this.m_DataCurrentState != State.RoundStart)
             this.m_InputsManager.FixedUpdate();
     }
 
@@ -77,32 +130,56 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     IEnumerator RoundStartState()
     {
-        while (this.m_CurrentState == State.RoundStart)
+        this.m_DataStartTimer = this.m_StartTimerDelay;
+        while (this.m_DataCurrentState == State.RoundStart
+            && this.m_DataStartTimer > 0.0f)
         {
+            this.m_DataStartTimer -= Time.deltaTime;
             yield return null;
         }
+        SpawnEvent(this, null);
+        this.ChangeState(State.RoundRun);
     }
 
     IEnumerator RoundRunState()
     {
-        while (this.m_CurrentState == State.RoundRun)
+        while (this.m_DataCurrentState == State.RoundRun)
         {
             this.m_InputsManager.Update();
+            GlobalDatas.Instance.m_LevelDatas.m_CurrentTime += Time.deltaTime;
+
+            if (this.IsScoreLimitReach())
+            {
+                this.m_Winner.m_EPlayer =
+                    GlobalDatas.Instance.m_Player1.m_Score > GlobalDatas.Instance.m_Player2.m_Score
+                    ? EPlayer.Player1 : EPlayer.Player2;
+
+                GameManager.RoundEndEvent(this, this.m_Winner);
+                this.ChangeState(State.RoundEnd);
+            }
+
             yield return null;
         }
     }
 
     IEnumerator RoundEndState()
     {
-        while (this.m_CurrentState == State.RoundEnd)
+        this.m_DataRounEndTimer = this.m_RoundEndTimerDelay;
+
+        while (this.m_DataCurrentState == State.RoundEnd
+            && this.m_DataRounEndTimer > 0.0f)
         {
+            this.m_DataRounEndTimer -= Time.deltaTime;
             yield return null;
         }
+        GlobalDatas.Instance.ResetScore();
+        Application.LoadLevel(this.m_StartScene);
+        this.ChangeState(State.RoundStart);
     }
 
     IEnumerator PauseState()
     {
-        while (this.m_CurrentState == State.Pause)
+        while (this.m_DataCurrentState == State.Pause)
         {
             yield return null;
         }
@@ -114,9 +191,9 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void ChangeState(State _NewState)
     {
-        if (_NewState != this.m_CurrentState)
+        if (_NewState != this.m_DataCurrentState)
         {
-            this.m_CurrentState = _NewState;
+            this.m_DataCurrentState = _NewState;
             string lMethodName = _NewState.ToString() + "State";
 
             /**
@@ -133,6 +210,14 @@ public class GameManager : SingletonBehaviour<GameManager>
     #endregion
 
     #region "Utilities functions"
+
+    public bool IsScoreLimitReach()
+    {
+        if (GlobalDatas.Instance.m_Player1.m_Score >= this.m_ScoreLimit
+                || GlobalDatas.Instance.m_Player2.m_Score >= this.m_ScoreLimit)
+            return true;
+        return false;
+    }
 
     private void CalculateScore(PlayerDatas _PlayerDatas, EGoalHitType _EGoalHitType)
     {
@@ -181,7 +266,8 @@ public class GameManager : SingletonBehaviour<GameManager>
         else
             this.CalculateScore(GlobalDatas.Instance.m_Player2, lVO.m_EGoalHitType);
 
-        GameManager.GoalEvent(this, lVO);
+        if (this.m_CurrentState == State.RoundRun)
+            GameManager.GoalEvent(this, lVO);
     }
 
     public void OnPlayerMoveUp(Object _Obj, System.EventArgs _EventArg)
