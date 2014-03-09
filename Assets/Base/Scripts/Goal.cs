@@ -53,6 +53,11 @@ public class Goal : MonoBehaviour
                 this.m_GoalEvent(this, this.m_GoalVO);
                 break;
 
+            case "Shoot":
+                if (collider.GetComponent<Shoot>().m_EPlayer != this.m_EPlayer)
+                    collider.GetComponent<Shoot>().Disable();
+                break;
+
             default:
                 break;
         }

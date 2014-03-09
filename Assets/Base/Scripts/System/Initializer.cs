@@ -11,12 +11,16 @@ public class Initializer : MonoBehaviour
     public float m_RoundEndTimerDelay = 5.0f;
     public int m_ScoreLimit = 5;
 
-	void OnEnable() 
+    /**
+     ** System GameObject is never destroyed, the first GameManager's instance is called
+     ** and we attach GameManager to System.
+     ** When GameManager is filled, the level is loaded and Initialize is destroyed.
+     **/
+	void Awake() 
 	{
         DontDestroyOnLoad(this.gameObject);
 
         GameManager.Instance.transform.parent = this.transform;
-
         GameManager.Instance.m_StartScene = this.m_StartScene;
         GameManager.Instance.m_BallScoreValue = this.m_BallScoreValue;
         GameManager.Instance.m_EnemyScoreValue = this.m_EnemyScoreValue;
@@ -24,9 +28,10 @@ public class Initializer : MonoBehaviour
         GameManager.Instance.m_StartTimerDelay = this.m_StartTimerDelay;
         GameManager.Instance.m_ScoreLimit = this.m_ScoreLimit;
         GameManager.Instance.m_RoundEndTimerDelay = this.m_RoundEndTimerDelay;
-
-        Destroy(this);
+        GameManager.Instance.Initialize();
 
         Application.LoadLevel(this.m_StartScene);
+
+        Destroy(this);
 	}
 }

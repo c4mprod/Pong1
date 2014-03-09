@@ -62,7 +62,6 @@ public class GameManager : SingletonBehaviour<GameManager>
     public int m_ScoreLimit = 5;
 
     private InputsManager m_InputsManager = null;
-    private bool m_CanShoot = true;
     private WinnerVO m_Winner = new WinnerVO();
     private float m_TimeScaleSave = Time.timeScale;
 
@@ -96,7 +95,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     #endregion
 
-    void Awake()
+    public void Initialize()
     {
         this.m_DataStartTimer = this.m_StartTimerDelay;
         this.m_InputsManager = new InputsManager();
@@ -128,12 +127,14 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         GlobalDatas.Instance.m_LevelDatas.m_CurrentTime = 0.0f;
         this.m_DataStartTimer = this.m_StartTimerDelay;
+
         while (this.m_DataCurrentState == State.RoundStart
             && this.m_DataStartTimer > 0.0f)
         {
             this.m_DataStartTimer -= Time.deltaTime;
             yield return null;
         }
+
         GameManager.SpawnEvent(this, null);
         this.ChangeState(State.RoundRun);
     }
@@ -171,6 +172,7 @@ public class GameManager : SingletonBehaviour<GameManager>
             this.m_DataRounEndTimer -= Time.deltaTime;
             yield return null;
         }
+
         GlobalDatas.Instance.ResetScore();
         Application.LoadLevel(this.m_StartScene);
         this.ChangeState(State.RoundStart);
@@ -236,19 +238,6 @@ public class GameManager : SingletonBehaviour<GameManager>
             default:
                 break;
         }
-    }
-
-    private IEnumerator ShootTimerCoroutine()
-    {
-        float lTimer = 0.0f;
-
-        this.m_CanShoot = false;
-        while (lTimer < this.m_ShootDelay)
-        {
-            yield return new WaitForEndOfFrame();
-            lTimer += Time.deltaTime;
-        }
-        this.m_CanShoot = true;
     }
 
     #endregion
@@ -319,11 +308,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         if (this.m_CurrentState == State.RoundRun)
         {
-            if (this.m_CanShoot)
-            {
-                StartCoroutine("ShootTimerCoroutine");
-                GameManager.ShootEvent(_Obj, _EventArg);
-            }
+            //GameManager.ShootEvent(_Obj, _EventArg);
         }
     }
 

@@ -52,13 +52,17 @@ public class InputsManager : IUpdateBehaviour
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
         {
             if (Input.GetKey(lPair.Value))
+            {
                 this.m_Player1Inputs[lPair.Key] = true;
+            }
         }
 
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
         {
             if (Input.GetKey(lPair.Value))
+            {
                 this.m_Player2Inputs[lPair.Key] = true;
+            }
         }
 
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_UnbindableControls)
