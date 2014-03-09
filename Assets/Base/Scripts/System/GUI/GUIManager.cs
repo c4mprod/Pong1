@@ -58,7 +58,7 @@ public class GUIManager : MonoBehaviour
     {
         if (GameManager.Instance.m_CurrentState == GameManager.State.RoundStart)
         {
-            GUI.Label(this.m_RoundRunTimerRect, "<size=40> Start in : " + (int)GameManager.Instance.m_StartTimer + "</size>");
+            GUI.Label(this.m_RoundRunTimerRect, "<size=40> Start in : " + (int)(GameManager.Instance.m_StartTimer + 1.0f) + "</size>");
         }
         if (GameManager.Instance.m_CurrentState == GameManager.State.RoundRun
             || GameManager.Instance.m_CurrentState == GameManager.State.Pause)
