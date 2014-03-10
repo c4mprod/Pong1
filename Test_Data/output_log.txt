@@ -11,31 +11,19 @@ Platform assembly: E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll (this message 
 Loading E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.045 seconds
+- Completed reload, in  0.044 seconds
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 0.226228 ms
+UnloadTime: 0.236919 ms
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 181.
-Total: 0.418244 ms (FindLiveObjects: 0.009836 ms CreateObjectMapping: 0.005987 ms MarkObjects: 0.087668 ms  DeleteObjects: 0.002993 ms)
+Total: 0.407980 ms (FindLiveObjects: 0.010691 ms CreateObjectMapping: 0.006414 ms MarkObjects: 0.059871 ms  DeleteObjects: 0.005131 ms)
 
-UnloadTime: 1.271410 ms
+UnloadTime: 1.859433 ms
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 220.
-Total: 0.431073 ms (FindLiveObjects: 0.009408 ms CreateObjectMapping: 0.006842 ms MarkObjects: 0.110762 ms  DeleteObjects: 0.002993 ms)
-
-UnloadTime: 0.238202 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 228.
-Total: 0.413112 ms (FindLiveObjects: 0.009408 ms CreateObjectMapping: 0.007270 ms MarkObjects: 0.105630 ms  DeleteObjects: 0.004276 ms)
-
-UnloadTime: 0.301922 ms
-Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 236.
-Total: 0.685099 ms (FindLiveObjects: 0.014967 ms CreateObjectMapping: 0.010691 ms MarkObjects: 0.192015 ms  DeleteObjects: 0.004276 ms)
+Total: 0.685099 ms (FindLiveObjects: 0.014112 ms CreateObjectMapping: 0.010691 ms MarkObjects: 0.190305 ms  DeleteObjects: 0.003848 ms)
 

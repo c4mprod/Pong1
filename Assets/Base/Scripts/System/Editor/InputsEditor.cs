@@ -33,6 +33,7 @@ public class InputsEditor : EditorWindow
 
         GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 1 controls");
         GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 2 controls");
+        GlobalDatas.Instance.m_InputsBinding.m_GeneralControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "General controls");
 
         EditorGUILayout.Separator();
         EditorGUILayout.BeginHorizontal();
@@ -43,13 +44,7 @@ public class InputsEditor : EditorWindow
              **/
             if (GUILayout.Button("Save", GUILayout.Width(200f)))
             {
-                EditorUtility.SetDirty(GlobalDatas.Instance.m_InputsBinding);
-                InputsDatas lLoadTest = Resources.LoadAssetAtPath<InputsDatas>(InputsDatas.InputsPath);
-
-                if (lLoadTest == null)
-                    AssetDatabase.CreateAsset(GlobalDatas.Instance.m_InputsBinding, InputsDatas.InputsPath);
-                else
-                    AssetDatabase.SaveAssets();
+                GlobalDatas.Instance.m_InputsBinding.Save<InputsDatas>(InputsDatas.InputsPath);
             }
 
         }

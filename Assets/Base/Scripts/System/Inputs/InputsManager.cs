@@ -23,7 +23,7 @@ public class InputsManager : IUpdateBehaviour
 
     private Dictionary<string, bool> m_Player1Inputs = new Dictionary<string, bool>();
     private Dictionary<string, bool> m_Player2Inputs = new Dictionary<string, bool>();
-    private Dictionary<string, bool> m_UnbindableInputs = new Dictionary<string, bool>();
+    private Dictionary<string, bool> m_GeneralInputs = new Dictionary<string, bool>();
     private Dictionary<string, GameManager.CustomEventHandler> m_ControlsEvents = new Dictionary<string, GameManager.CustomEventHandler>();
     private InputsVO m_InputsVO = new InputsVO();
 
@@ -43,8 +43,8 @@ public class InputsManager : IUpdateBehaviour
             this.m_Player1Inputs[lPair.Key] = false;
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
             this.m_Player2Inputs[lPair.Key] = false;
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_UnbindableControls)
-            this.m_UnbindableInputs[lPair.Key] = false;
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
+            this.m_GeneralInputs[lPair.Key] = false;
     }
 
     public void Update()
@@ -65,10 +65,10 @@ public class InputsManager : IUpdateBehaviour
             }
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_UnbindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
         {
             if (Input.GetKey(lPair.Value))
-                this.m_UnbindableInputs[lPair.Key] = true;
+                this.m_GeneralInputs[lPair.Key] = true;
         }
     }
 
@@ -94,13 +94,13 @@ public class InputsManager : IUpdateBehaviour
             }
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_UnbindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
         {
-            if (this.m_UnbindableInputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
+            if (this.m_GeneralInputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
                 this.m_InputsVO.m_EPlayer = GameManager.EPlayer.None;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
-                this.m_UnbindableInputs[lPair.Key] = false;
+                this.m_GeneralInputs[lPair.Key] = false;
             }
         }
     }
@@ -117,9 +117,9 @@ public class InputsManager : IUpdateBehaviour
             this.m_Player2Inputs[lPair.Key] = false;
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_UnbindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
         {
-            this.m_UnbindableInputs[lPair.Key] = false;
+            this.m_GeneralInputs[lPair.Key] = false;
         }
     }
 }
