@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using System.Collections.Generic;
 
 public class GenericCustomAsset<T> : ScriptableObject
@@ -11,7 +10,6 @@ public class GenericCustomAsset<T> : ScriptableObject
 
         if ((lTmp = Resources.LoadAssetAtPath<T>(_Path)) == null)
         {
-            Debug.Log("NOUL");
             return (ScriptableObject.CreateInstance<T>());
         }
         return lTmp;

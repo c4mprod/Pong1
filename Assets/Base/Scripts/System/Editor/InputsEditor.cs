@@ -31,9 +31,9 @@ public class InputsEditor : EditorWindow
          ** ToogleHelper remember selected control and we can associate keyboard event to simulate a bindable key button.
          **/
 
-        GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 1 controls");
-        GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 2 controls");
-        GlobalDatas.Instance.m_InputsBinding.m_GeneralControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "General controls");
+        GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 1 controls");
+        GlobalDatasModel.Instance.m_InputsBinding.m_Player2BindableControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "Player 2 controls");
+        GlobalDatasModel.Instance.m_InputsBinding.m_GeneralControls.OnGUI(this.m_ToogleHelper, ref this.m_TooglePosition, "General controls");
 
         EditorGUILayout.Separator();
         EditorGUILayout.BeginHorizontal();
@@ -44,7 +44,7 @@ public class InputsEditor : EditorWindow
              **/
             if (GUILayout.Button("Save", GUILayout.Width(200f)))
             {
-                GlobalDatas.Instance.m_InputsBinding.Save<InputsDatas>(InputsDatas.InputsPath);
+                GlobalDatasModel.Instance.m_InputsBinding.Save<InputsDatas>(InputsDatas.InputsPath);
             }
 
         }

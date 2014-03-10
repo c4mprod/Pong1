@@ -20,15 +20,15 @@ public class Initializer : MonoBehaviour
 	{
         DontDestroyOnLoad(this.gameObject);
 
-        GameManager.Instance.transform.parent = this.transform;
-        GameManager.Instance.m_StartScene = this.m_StartScene;
-        GameManager.Instance.m_BallScoreValue = this.m_BallScoreValue;
-        GameManager.Instance.m_EnemyScoreValue = this.m_EnemyScoreValue;
-        GameManager.Instance.m_ShootDelay = this.m_ShootDelay;
-        GameManager.Instance.m_StartTimerDelay = this.m_StartTimerDelay;
-        GameManager.Instance.m_ScoreLimit = this.m_ScoreLimit;
-        GameManager.Instance.m_RoundEndTimerDelay = this.m_RoundEndTimerDelay;
-        GameManager.Instance.Initialize();
+        GameController.Instance.transform.parent = this.transform;
+        GameController.Instance.m_StartScene = this.m_StartScene;
+        GameController.Instance.m_BallScoreValue = this.m_BallScoreValue;
+        GameController.Instance.m_EnemyScoreValue = this.m_EnemyScoreValue;
+        GameController.Instance.m_ShootDelay = this.m_ShootDelay;
+        GameController.Instance.m_StartTimerDelay = this.m_StartTimerDelay;
+        GameController.Instance.m_ScoreLimit = this.m_ScoreLimit;
+        GameController.Instance.m_RoundEndTimerDelay = this.m_RoundEndTimerDelay;
+        GameController.Instance.Initialize();
 
         Application.LoadLevel(this.m_StartScene);
 

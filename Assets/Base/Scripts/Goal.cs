@@ -6,7 +6,7 @@ public class Goal : MonoBehaviour
 {
     #region "Events"
 
-    private event GameManager.CustomEventHandler m_GoalEvent;
+    private event GameController.CustomEventHandler m_GoalEvent;
 
     #endregion
 
@@ -14,24 +14,24 @@ public class Goal : MonoBehaviour
 
     public class GoalVO : System.EventArgs
     {
-        public GameManager.EPlayer m_EPlayer;
-        public GameManager.EGoalHitType m_EGoalHitType;
+        public GameController.EPlayer m_EPlayer;
+        public GameController.EGoalHitType m_EGoalHitType;
 
     }
 
     #endregion
 
-    public GameManager.EPlayer m_EPlayer;
+    public GameController.EPlayer m_EPlayer;
     private GoalVO m_GoalVO = new GoalVO();
 
     void OnEnable()
     {
-        this.m_GoalEvent += GameManager.Instance.OnGoal;
+        this.m_GoalEvent += GameController.Instance.OnGoal;
     }
 
     void OnDisable()
     {
-        this.m_GoalEvent -= GameManager.Instance.OnGoal;
+        this.m_GoalEvent -= GameController.Instance.OnGoal;
     }
 
     void Awake()
@@ -44,12 +44,12 @@ public class Goal : MonoBehaviour
         switch (collider.tag)
         {
             case "Ball":
-                this.m_GoalVO.m_EGoalHitType = GameManager.EGoalHitType.Ball;
+                this.m_GoalVO.m_EGoalHitType = GameController.EGoalHitType.Ball;
                 this.m_GoalEvent(this, this.m_GoalVO);
                 break;
 
             case "Enemy":
-                this.m_GoalVO.m_EGoalHitType = GameManager.EGoalHitType.Enemy;
+                this.m_GoalVO.m_EGoalHitType = GameController.EGoalHitType.Enemy;
                 this.m_GoalEvent(this, this.m_GoalVO);
                 break;
 

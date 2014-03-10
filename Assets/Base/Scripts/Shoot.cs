@@ -5,12 +5,12 @@ public class Shoot : MonoBehaviour
 {
     #region "Events"
 
-    public event GameManager.CustomEventHandler m_DisableEvent;
+    public event GameController.CustomEventHandler m_DisableEvent;
 
     #endregion
 
     public float m_ShootSpeed = 5.0f;
-    public GameManager.EPlayer m_EPlayer = GameManager.EPlayer.None;
+    public GameController.EPlayer m_EPlayer = GameController.EPlayer.None;
     private Vector2 m_Move = new Vector2(0.0f, 0.0f);
     private Vector2 m_Position = new Vector2(0.0f, 0.0f);
     private Vector2 m_PositionSave = new Vector2(0.0f, 0.0f);
@@ -25,7 +25,7 @@ public class Shoot : MonoBehaviour
         this.rigidbody2D.velocity = this.m_Move;
     }
 
-    public void Initialize(Vector2 _Position, GameManager.EPlayer _EPlayer)
+    public void Initialize(Vector2 _Position, GameController.EPlayer _EPlayer)
     {
         this.m_EPlayer = _EPlayer;
         this.transform.position = _Position;

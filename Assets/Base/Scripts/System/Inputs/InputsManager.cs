@@ -5,10 +5,10 @@ public class InputsManager : IUpdateBehaviour
 {
     #region "Events"
 
-    public static event GameManager.CustomEventHandler MoveUpEvent;
-    public static event GameManager.CustomEventHandler MoveDownEvent;
-    public static event GameManager.CustomEventHandler ShootEvent;
-    public static event GameManager.CustomEventHandler PauseEvent;
+    public static event GameController.CustomEventHandler MoveUpEvent;
+    public static event GameController.CustomEventHandler MoveDownEvent;
+    public static event GameController.CustomEventHandler ShootEvent;
+    public static event GameController.CustomEventHandler PauseEvent;
 
     #endregion
 
@@ -16,7 +16,7 @@ public class InputsManager : IUpdateBehaviour
 
     public class InputsVO : System.EventArgs
     {
-        public GameManager.EPlayer m_EPlayer;
+        public GameController.EPlayer m_EPlayer;
     }
 
     #endregion
@@ -24,32 +24,32 @@ public class InputsManager : IUpdateBehaviour
     private Dictionary<string, bool> m_Player1Inputs = new Dictionary<string, bool>();
     private Dictionary<string, bool> m_Player2Inputs = new Dictionary<string, bool>();
     private Dictionary<string, bool> m_GeneralInputs = new Dictionary<string, bool>();
-    private Dictionary<string, GameManager.CustomEventHandler> m_ControlsEvents = new Dictionary<string, GameManager.CustomEventHandler>();
+    private Dictionary<string, GameController.CustomEventHandler> m_ControlsEvents = new Dictionary<string, GameController.CustomEventHandler>();
     private InputsVO m_InputsVO = new InputsVO();
 
     public InputsManager()
     {
-        MoveUpEvent += GameManager.Instance.OnPlayerMoveUp;
-        MoveDownEvent += GameManager.Instance.OnPlayerMoveDown;
-        ShootEvent += GameManager.Instance.OnPlayerShoot;
-        PauseEvent += GameManager.Instance.OnPause;
+        MoveUpEvent += GameController.Instance.OnPlayerMoveUp;
+        MoveDownEvent += GameController.Instance.OnPlayerMoveDown;
+        ShootEvent += GameController.Instance.OnPlayerShoot;
+        PauseEvent += GameController.Instance.OnPause;
 
         this.m_ControlsEvents["MoveUp"] = MoveUpEvent;
         this.m_ControlsEvents["MoveDown"] = MoveDownEvent;
         this.m_ControlsEvents["Shoot"] = ShootEvent;
         this.m_ControlsEvents["Pause"] = PauseEvent;
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls)
             this.m_Player1Inputs[lPair.Key] = false;
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player2BindableControls)
             this.m_Player2Inputs[lPair.Key] = false;
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_GeneralControls)
             this.m_GeneralInputs[lPair.Key] = false;
     }
 
     public void Update()
     {
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls)
         {
             if (Input.GetKey(lPair.Value))
             {
@@ -57,7 +57,7 @@ public class InputsManager : IUpdateBehaviour
             }
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player2BindableControls)
         {
             if (Input.GetKey(lPair.Value))
             {
@@ -65,7 +65,7 @@ public class InputsManager : IUpdateBehaviour
             }
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_GeneralControls)
         {
             if (Input.GetKey(lPair.Value))
                 this.m_GeneralInputs[lPair.Key] = true;
@@ -74,31 +74,31 @@ public class InputsManager : IUpdateBehaviour
 
     public void FixedUpdate()
     {
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls)
         {
             if (this.m_Player1Inputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
-                this.m_InputsVO.m_EPlayer = GameManager.EPlayer.Player1;
+                this.m_InputsVO.m_EPlayer = GameController.EPlayer.Player1;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
                 this.m_Player1Inputs[lPair.Key] = false;
             }
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player2BindableControls)
         {
             if (this.m_Player2Inputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
-                this.m_InputsVO.m_EPlayer = GameManager.EPlayer.Player2;
+                this.m_InputsVO.m_EPlayer = GameController.EPlayer.Player2;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
                 this.m_Player2Inputs[lPair.Key] = false;
             }
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_GeneralControls)
         {
             if (this.m_GeneralInputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
-                this.m_InputsVO.m_EPlayer = GameManager.EPlayer.None;
+                this.m_InputsVO.m_EPlayer = GameController.EPlayer.None;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
                 this.m_GeneralInputs[lPair.Key] = false;
             }
@@ -107,17 +107,17 @@ public class InputsManager : IUpdateBehaviour
 
     public void ResetInputs()
     {
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player1BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls)
         {
             this.m_Player1Inputs[lPair.Key] = false;
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_Player2BindableControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player2BindableControls)
         {
             this.m_Player2Inputs[lPair.Key] = false;
         }
 
-        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatas.Instance.m_InputsBinding.m_GeneralControls)
+        foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_GeneralControls)
         {
             this.m_GeneralInputs[lPair.Key] = false;
         }

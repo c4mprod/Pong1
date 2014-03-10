@@ -41,14 +41,14 @@ public class BallSpawn : MonoBehaviour
 
     void OnEnable()
     {
-        GameManager.GoalEvent += OnGoal;
-        GameManager.SpawnEvent += OnSpawn;
+        GameController.GoalEvent += OnGoal;
+        GameController.SpawnEvent += OnSpawn;
     }
 
     void OnDisable()
     {
-        GameManager.GoalEvent -= OnGoal;
-        GameManager.SpawnEvent -= OnSpawn;
+        GameController.GoalEvent -= OnGoal;
+        GameController.SpawnEvent -= OnSpawn;
     }
 
     #endregion
@@ -64,7 +64,7 @@ public class BallSpawn : MonoBehaviour
     {
         Goal.GoalVO lGoalVO = (Goal.GoalVO)_EventArg;
 
-        if (GameManager.Instance.IsScoreLimitReach())
+        if (GameController.Instance.IsScoreLimitReach())
         {
             if (this.m_BallInstance != null)
                 Destroy(this.m_BallInstance.gameObject);
@@ -76,8 +76,8 @@ public class BallSpawn : MonoBehaviour
             this.m_BallInstance.transform.rotation = Quaternion.identity;
 
             // Set the ball spawn direction to the goaling player.
-            if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player2)
-                || (this.m_SpawnForce.x < 0.0f && lGoalVO.m_EPlayer == GameManager.EPlayer.Player1))
+            if ((this.m_SpawnForce.x > 0.0f && lGoalVO.m_EPlayer == GameController.EPlayer.Player2)
+                || (this.m_SpawnForce.x < 0.0f && lGoalVO.m_EPlayer == GameController.EPlayer.Player1))
                 this.m_SpawnForce.x *= -1;
 
             this.Spawn();

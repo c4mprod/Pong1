@@ -108,7 +108,7 @@ public static class CustomEditorHelper
             return;
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("Racket Name : ");
+            GUILayout.Label("Name : ");
             _RacketDatas.m_Name = EditorGUILayout.TextField(_RacketDatas.m_Name);
             GUILayout.Space(5);
         }
@@ -116,7 +116,7 @@ public static class CustomEditorHelper
 
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("Racket Sprite : ");
+            GUILayout.Label("Sprite : ");
             _RacketDatas.m_Sprite = (Sprite)EditorGUILayout.ObjectField((Object)_RacketDatas.m_Sprite, typeof(Sprite), false);
             GUILayout.Space(5);
         }
@@ -124,7 +124,7 @@ public static class CustomEditorHelper
 
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("Racket Speed : ");
+            GUILayout.Label("Speed : ");
             _RacketDatas.m_Speed = EditorGUILayout.FloatField(_RacketDatas.m_Speed);
             GUILayout.Space(5);
         }
@@ -132,7 +132,7 @@ public static class CustomEditorHelper
 
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label("Racket Width : ");
+            GUILayout.Label("Width : ");
             _RacketDatas.m_Width = EditorGUILayout.FloatField(_RacketDatas.m_Width);
         }
         EditorGUILayout.EndHorizontal();

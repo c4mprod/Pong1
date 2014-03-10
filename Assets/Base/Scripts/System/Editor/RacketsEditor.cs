@@ -19,12 +19,12 @@ public class RacketsEditor : EditorWindow
         this.m_ScrollPosition = EditorGUILayout.BeginScrollView(this.m_ScrollPosition, false, true);
 
         EditorGUILayout.Separator();
-        GlobalDatas.Instance.m_RacketsData.OnGUI();
+        GlobalDatasModel.Instance.m_RacketsData.OnGUI();
         EditorGUILayout.BeginHorizontal();
         {
             if (GUILayout.Button("Save", GUILayout.Width(200f)))
             {
-                GlobalDatas.Instance.m_RacketsData.Save<RacketsDatas>(RacketsDatas.Path);
+                GlobalDatasModel.Instance.m_RacketsData.Save<RacketsDatas>(RacketsDatas.Path);
             }
         }
         EditorGUILayout.EndHorizontal();

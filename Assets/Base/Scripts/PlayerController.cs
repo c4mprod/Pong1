@@ -5,7 +5,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public GameObject m_PrefabShootsHolder;
-    public GameManager.EPlayer m_Player;
+    public GameController.EPlayer m_Player;
     public float m_MoveSpeed = 1.0f;
 
     private Vector2 m_Move = new Vector2();
@@ -33,15 +33,15 @@ public class PlayerController : MonoBehaviour
 
     void OnEnable()
     {
-        GameManager.MoveUpEvent += this.OnMoveUp;
-        GameManager.MoveDownEvent += this.OnMoveDown;
+        GameController.MoveUpEvent += this.OnMoveUp;
+        GameController.MoveDownEvent += this.OnMoveDown;
         //GameManager.ShootEvent += this.OnShoot;
     }
 
     void OnDisable()
     {
-        GameManager.MoveUpEvent -= this.OnMoveUp;
-        GameManager.MoveDownEvent -= this.OnMoveDown;
+        GameController.MoveUpEvent -= this.OnMoveUp;
+        GameController.MoveDownEvent -= this.OnMoveDown;
         //GameManager.ShootEvent -= this.OnShoot;
     }
 
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
         float lTimer = 0.0f;
 
         this.m_CanShoot = false;
-        while (lTimer < GameManager.Instance.m_ShootDelay)
+        while (lTimer < GameController.Instance.m_ShootDelay)
         {
             yield return new WaitForEndOfFrame();
             lTimer += Time.deltaTime;
