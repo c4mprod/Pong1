@@ -3,6 +3,25 @@ using System.Collections.Generic;
 
 public static class GeneralHelpers
 {
+    public static int CalculateCollectionPositions(out int _PreviousPos, out int _NextPos, int _CurrentPos,
+        int _CollectionSize)
+    {
+        if ((_CollectionSize - 1) - _CurrentPos < 0)
+            _CurrentPos = 0;
+        if (_CurrentPos < 0)
+            _CurrentPos = _CollectionSize - 1;
+
+        _PreviousPos = _CurrentPos - 1;
+        _NextPos = _CurrentPos + 1;
+
+        if (_PreviousPos < 0)
+            _PreviousPos = _CollectionSize - 1;
+        if ((_CollectionSize - 1) - _NextPos < 0)
+            _NextPos = 0;
+
+        return (_CurrentPos);
+    }
+
     public static string FloatToTimeString(this float _Time)
     {
         int lMinutes = Mathf.FloorToInt(_Time / 60.0f);

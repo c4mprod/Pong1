@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class GUIView : MonoBehaviour
+public class GameGUIView : MonoBehaviour
 {
     #region "Events"
 
-    public static event GameController.CustomEventHandler ContinueEvent;
-    public static event GameController.CustomEventHandler QuitEvent;
+    public static event CustomEventHandler ContinueEvent;
+    public static event CustomEventHandler QuitEvent;
 
     #endregion
 
@@ -43,7 +43,7 @@ public class GUIView : MonoBehaviour
         GameController.WinnerVO lWinnerVO = (GameController.WinnerVO)_EventArg;
 
         // The player sent is the winner.
-        this.m_RoundEndMsg = (lWinnerVO.m_EPlayer == GameController.EPlayer.Player1)
+        this.m_RoundEndMsg = (lWinnerVO.m_EPlayer == GlobalDatasModel.EPlayer.Player1)
             ? "Player 1 Win" : "Player 2 Win";
     }
 
@@ -70,24 +70,24 @@ public class GUIView : MonoBehaviour
     {
         this.RoundRun();
         if (GUI.Button(this.m_ContinueButton, "Continue"))
-            GUIView.ContinueEvent(this, null);
+            GameGUIView.ContinueEvent(this, null);
         if (GUI.Button(this.m_QuitButon, "Quit"))
-            GUIView.QuitEvent(this, null);
+            GameGUIView.QuitEvent(this, null);
     }
 
     #endregion
 
     void OnEnable()
     {
-        GUIView.ContinueEvent += GameController.Instance.OnContinue;
-        GUIView.QuitEvent += GameController.Instance.OnQuit;
+        GameGUIView.ContinueEvent += GameController.Instance.OnContinue;
+        GameGUIView.QuitEvent += GameController.Instance.OnQuit;
         GameController.RoundEndEvent += this.RoundEnd;
     }
 
     void OnDisable()
     {
-        GUIView.ContinueEvent -= GameController.Instance.OnContinue;
-        GUIView.QuitEvent -= GameController.Instance.OnQuit;
+        GameGUIView.ContinueEvent -= GameController.Instance.OnContinue;
+        GameGUIView.QuitEvent -= GameController.Instance.OnQuit;
         GameController.RoundEndEvent -= this.RoundEnd;
     }
 

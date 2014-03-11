@@ -1,72 +1,202 @@
+// ***********************************************************************
+// Assembly         : Assembly-CSharp
+// Author           : Adrien Albertini
+// Created          : 03-05-2014
+//
+// Last Modified By : Adrien Albertini
+// Last Modified On : 03-11-2014
+// ***********************************************************************
+// <copyright file="GameController.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ************************************************************************
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
+/// <summary>
+/// Delegate CustomEventHandler.
+/// </summary>
+/// <param name="_Obj">The _ object.</param>
+/// <param name="_EArgs">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+public delegate void CustomEventHandler(Object _Obj, System.EventArgs _EArgs);
+
+/// <summary>
+/// Class GameController.
+/// </summary>
 public class GameController : SingletonBehaviour<GameController>
 {
     #region "Enumerations"
 
+    /// <summary>
+    /// Enum State
+    /// </summary>
     public enum State
     {
+        /// <summary>
+        /// The none
+        /// </summary>
         None,
+        /// <summary>
+        /// The round start
+        /// </summary>
         RoundStart,
+        /// <summary>
+        /// The round run
+        /// </summary>
         RoundRun,
+        /// <summary>
+        /// The round end
+        /// </summary>
         RoundEnd,
-        PlayersSelection,
+        /// <summary>
+        /// The players selection
+        /// </summary>
+        RacketSelection,
+        /// <summary>
+        /// The pause
+        /// </summary>
         Pause
-    }
-
-    public enum EPlayer
-    {
-        None,
-        Player1,
-        Player2
-    }
-
-    public enum EGoalHitType
-    {
-        Ball,
-        Enemy
     }
 
     #endregion
 
     #region "Events"
 
-    public delegate void CustomEventHandler(Object _Obj, System.EventArgs _EArgs);
+    /// <summary>
+    /// Occurs when [spawn event].
+    /// </summary>
     public static event CustomEventHandler SpawnEvent;
+
+    /// <summary>
+    /// Occurs when [goal event].
+    /// </summary>
     public static event CustomEventHandler GoalEvent;
+
+    /// <summary>
+    /// Occurs when [move up event].
+    /// </summary>
     public static event CustomEventHandler MoveUpEvent;
+
+    /// <summary>
+    /// Occurs when [move down event].
+    /// </summary>
     public static event CustomEventHandler MoveDownEvent;
+
+    /// <summary>
+    /// Occurs when [shoot event].
+    /// </summary>
     public static event CustomEventHandler ShootEvent;
+
+    /// <summary>
+    /// Occurs when [round end event].
+    /// </summary>
     public static event CustomEventHandler RoundEndEvent;
+
+    /// <summary>
+    /// Occurs when [right event].
+    /// </summary>
+    public static event CustomEventHandler RightEvent;
+
+    /// <summary>
+    /// Occurs when [left event].
+    /// </summary>
+    public static event CustomEventHandler LeftEvent;
+
+    /// <summary>
+    /// Occurs when [return event].
+    /// </summary>
+    public static event CustomEventHandler ReturnEvent;
+
+    /// <summary>
+    /// Occurs when [player selection changed event].
+    /// </summary>
+    public static event CustomEventHandler PlayerSelectionChangedEvent;
 
     #endregion
 
     #region "EventArgs Value Objects"
 
+    /// <summary>
+    /// Class WinnerVO.
+    /// </summary>
     public class WinnerVO : System.EventArgs
     {
-        public GameController.EPlayer m_EPlayer;
+        /// <summary>
+        /// The m_ e player
+        /// </summary>
+        public GlobalDatasModel.EPlayer m_EPlayer;
+    }
+
+    public class SelectedRacketVO : System.EventArgs
+    {
+        public GlobalDatasModel.EPlayer m_Player = GlobalDatasModel.EPlayer.None;
+        public int m_RacketSelectedPos = 0;
+    }
+
+    public class RacketSelectionPlayerVO : System.EventArgs
+    {
+        public GlobalDatasModel.EPlayer m_Player = GlobalDatasModel.EPlayer.None;
     }
 
     #endregion
 
     #region "Member variables"
 
-    public string m_StartScene = "Game";
-    public float m_BallScoreValue = 1.0f;
-    public float m_EnemyScoreValue = 0.2f;
+    /// <summary>
+    /// The m_ game scene
+    /// </summary>
+    public string m_GameScene = "Game";
+    /// <summary>
+    /// The m_ racket selection scene
+    /// </summary>
+    public string m_RacketSelectionScene = "RacketSelection";
+    /// <summary>
+    /// The m_ shoot delay
+    /// </summary>
     public float m_ShootDelay = 1.0f;
+    /// <summary>
+    /// The m_ start timer delay
+    /// </summary>
     public float m_StartTimerDelay = 5.0f;
+    /// <summary>
+    /// The m_ round end timer delay
+    /// </summary>
     public float m_RoundEndTimerDelay = 5.0f;
-    public int m_ScoreLimit = 5;
+    /// <summary>
+    /// The m_ player1
+    /// </summary>
+    public GameObject m_Player1 = null;
+    /// <summary>
+    /// The m_ player2
+    /// </summary>
+    public GameObject m_Player2 = null;
 
+    /// <summary>
+    /// The m_ inputs manager
+    /// </summary>
     private InputsManager m_InputsManager = null;
+    /// <summary>
+    /// The m_ winner
+    /// </summary>
     private WinnerVO m_Winner = new WinnerVO();
+
+    private RacketSelectionPlayerVO m_RacketSelectionPlayer = new RacketSelectionPlayerVO();
+
+    /// <summary>
+    /// The m_ time scale save
+    /// </summary>
     private float m_TimeScaleSave = Time.timeScale;
 
+    /// <summary>
+    /// The m_ data current state
+    /// </summary>
     private State m_DataCurrentState;
+    /// <summary>
+    /// Gets the state of the m_ current.
+    /// </summary>
+    /// <value>The state of the m_ current.</value>
     public State m_CurrentState
     {
         get
@@ -75,7 +205,14 @@ public class GameController : SingletonBehaviour<GameController>
         }
     }
 
+    /// <summary>
+    /// The m_ data start timer
+    /// </summary>
     private float m_DataStartTimer = 1.0f;
+    /// <summary>
+    /// Gets the m_ start timer.
+    /// </summary>
+    /// <value>The m_ start timer.</value>
     public float m_StartTimer
     {
         get
@@ -84,36 +221,56 @@ public class GameController : SingletonBehaviour<GameController>
         }
     }
 
-    private float m_DataRounEndTimer = 1.0f;
+    /// <summary>
+    /// The m_ data round end timer
+    /// </summary>
+    private float m_DataRoundEndTimer = 1.0f;
+    /// <summary>
+    /// Gets the m_ round end timer.
+    /// </summary>
+    /// <value>The m_ round end timer.</value>
     public float m_RoundEndTimer
     {
         get
         {
-            return this.m_DataRounEndTimer;
+            return this.m_DataRoundEndTimer;
         }
     }
 
 
     #endregion
 
+    /// <summary>
+    /// Initializes this instance.
+    /// </summary>
     public void Initialize()
     {
         this.m_DataStartTimer = this.m_StartTimerDelay;
         this.m_InputsManager = new InputsManager();
         this.m_DataCurrentState = State.None;
-        this.ChangeState(State.RoundStart);
+        this.m_RacketSelectionPlayer.m_Player = GlobalDatasModel.EPlayer.None;
+        this.ChangeState(State.RacketSelection);
     }
 
+    /// <summary>
+    /// Updates this instance.
+    /// </summary>
     void Update()
     {
         this.m_InputsManager.Update();
     }
 
+    /// <summary>
+    /// Fixed update.
+    /// </summary>
     void FixedUpdate()
     {
         this.m_InputsManager.FixedUpdate();
     }
 
+    /// <summary>
+    /// Called when [disable].
+    /// </summary>
     void OnDisable()
     {
         GameController.GoalEvent = null;
@@ -124,8 +281,13 @@ public class GameController : SingletonBehaviour<GameController>
 
     #region "States coroutines"
 
-    IEnumerator RoundStartState()
+    /// <summary>
+    /// Rounds the start state.
+    /// </summary>
+    /// <returns>IEnumerator.</returns>
+    private IEnumerator RoundStartState()
     {
+        Application.LoadLevel(this.m_GameScene);
         GlobalDatasModel.Instance.m_LevelDatas.m_CurrentTime = 0.0f;
         this.m_DataStartTimer = this.m_StartTimerDelay;
 
@@ -140,7 +302,11 @@ public class GameController : SingletonBehaviour<GameController>
         this.ChangeState(State.RoundRun);
     }
 
-    IEnumerator RoundRunState()
+    /// <summary>
+    /// Rounds the state of the run.
+    /// </summary>
+    /// <returns>IEnumerator.</returns>
+    private IEnumerator RoundRunState()
     {
         while (this.m_DataCurrentState == State.RoundRun)
         {
@@ -149,11 +315,11 @@ public class GameController : SingletonBehaviour<GameController>
             /**
              ** When the score limit is reach, a Round End Event is trigged with the player who win.
              **/
-            if (this.IsScoreLimitReach())
+            if (GlobalDatasModel.Instance.IsScoreLimitReach())
             {
                 this.m_Winner.m_EPlayer =
                     GlobalDatasModel.Instance.m_Player1.m_Score > GlobalDatasModel.Instance.m_Player2.m_Score
-                    ? EPlayer.Player1 : EPlayer.Player2;
+                    ? GlobalDatasModel.EPlayer.Player1 : GlobalDatasModel.EPlayer.Player2;
 
                 GameController.RoundEndEvent(this, this.m_Winner);
                 this.ChangeState(State.RoundEnd);
@@ -163,32 +329,43 @@ public class GameController : SingletonBehaviour<GameController>
         }
     }
 
-    IEnumerator RoundEndState()
+    /// <summary>
+    /// Rounds the end state.
+    /// </summary>
+    /// <returns>IEnumerator.</returns>
+    private IEnumerator RoundEndState()
     {
-        this.m_DataRounEndTimer = this.m_RoundEndTimerDelay;
+        this.m_DataRoundEndTimer = this.m_RoundEndTimerDelay;
 
         while (this.m_DataCurrentState == State.RoundEnd
-            && this.m_DataRounEndTimer > 0.0f)
+            && this.m_DataRoundEndTimer > 0.0f)
         {
-            this.m_DataRounEndTimer -= Time.deltaTime;
+            this.m_DataRoundEndTimer -= Time.deltaTime;
             yield return null;
         }
 
         GlobalDatasModel.Instance.ResetScore();
-        Application.LoadLevel(this.m_StartScene);
         this.ChangeState(State.RoundStart);
     }
 
-    IEnumerator PlayersSelectionState()
+    /// <summary>
+    /// Playerses the state of the selection.
+    /// </summary>
+    /// <returns>IEnumerator.</returns>
+    private IEnumerator RacketSelectionState()
     {
-        while (this.m_DataCurrentState == State.PlayersSelection)
+        Application.LoadLevel(this.m_RacketSelectionScene);
+        while (this.m_DataCurrentState == State.RacketSelection)
         {
             yield return null;
         }
-        this.ChangeState(State.RoundRun);
     }
 
-    IEnumerator PauseState()
+    /// <summary>
+    /// Pauses the state.
+    /// </summary>
+    /// <returns>IEnumerator.</returns>
+    private IEnumerator PauseState()
     {
         Time.timeScale = 0.0f;
         while (this.m_DataCurrentState == State.Pause)
@@ -201,6 +378,10 @@ public class GameController : SingletonBehaviour<GameController>
 
     #region "States functions"
 
+    /// <summary>
+    /// Changes the state.
+    /// </summary>
+    /// <param name="_NewState">New state of the _.</param>
     private void ChangeState(State _NewState)
     {
         this.m_InputsManager.ResetInputs();
@@ -223,37 +404,13 @@ public class GameController : SingletonBehaviour<GameController>
 
     #endregion
 
-    #region "Utilities functions"
-
-    public bool IsScoreLimitReach()
-    {
-        if (GlobalDatasModel.Instance.m_Player1.m_Score >= this.m_ScoreLimit
-                || GlobalDatasModel.Instance.m_Player2.m_Score >= this.m_ScoreLimit)
-            return true;
-        return false;
-    }
-
-    private void CalculateScore(PlayerDatas _PlayerDatas, EGoalHitType _EGoalHitType)
-    {
-        switch (_EGoalHitType)
-        {
-            case EGoalHitType.Ball:
-                _PlayerDatas.m_Score += this.m_BallScoreValue;
-                break;
-
-            case EGoalHitType.Enemy:
-                _PlayerDatas.m_Score += this.m_EnemyScoreValue;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    #endregion
-
     #region "Events functions"
 
+    /// <summary>
+    /// Handles the <see cref="E:Quit" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnQuit(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.Pause)
@@ -262,6 +419,11 @@ public class GameController : SingletonBehaviour<GameController>
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="E:Continue" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnContinue(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.Pause)
@@ -271,6 +433,11 @@ public class GameController : SingletonBehaviour<GameController>
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="E:Pause" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnPause(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.RoundRun)
@@ -279,6 +446,11 @@ public class GameController : SingletonBehaviour<GameController>
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="E:Goal" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnGoal(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.RoundRun)
@@ -288,37 +460,117 @@ public class GameController : SingletonBehaviour<GameController>
             /**
              ** If the player 2 goal is hit, the player 1 win points.
              **/
+            GlobalDatasModel.Instance.CalculateScore(lVO.m_EPlayer, lVO.m_EGoalHitType);
 
-            if (lVO.m_EPlayer == EPlayer.Player2)
-                this.CalculateScore(GlobalDatasModel.Instance.m_Player1, lVO.m_EGoalHitType);
-            else
-                this.CalculateScore(GlobalDatasModel.Instance.m_Player2, lVO.m_EGoalHitType);
-
-            GameController.GoalEvent(this, lVO);
+            if (GameController.GoalEvent != null)
+                GameController.GoalEvent(this, lVO);
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="E:PlayerMoveUp" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnPlayerMoveUp(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.RoundRun)
         {
-            GameController.MoveUpEvent(_Obj, _EventArg);
+            if (GameController.MoveUpEvent != null)
+                GameController.MoveUpEvent(_Obj, _EventArg);
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="E:PlayerMoveDown" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnPlayerMoveDown(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.RoundRun)
         {
-            GameController.MoveDownEvent(_Obj, _EventArg);
+            if (GameController.MoveDownEvent != null)
+                GameController.MoveDownEvent(_Obj, _EventArg);
         }
     }
 
+    /// <summary>
+    /// Handles the <see cref="E:PlayerShoot" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     public void OnPlayerShoot(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_CurrentState == State.RoundRun)
         {
             //GameManager.ShootEvent(_Obj, _EventArg);
+        }
+    }
+
+    /// <summary>
+    /// Handles the <see cref="E:Right" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+    public void OnRight(Object _Obj, System.EventArgs _EventArg)
+    {
+        if (this.m_CurrentState == State.RacketSelection)
+        {
+            if (GameController.RightEvent != null)
+                GameController.RightEvent(this, null);
+        }
+    }
+
+    /// <summary>
+    /// Handles the <see cref="E:Left" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+    public void OnLeft(Object _Obj, System.EventArgs _EventArg)
+    {
+        if (this.m_CurrentState == State.RacketSelection)
+        {
+            if (GameController.LeftEvent != null)
+                GameController.LeftEvent(this, null);
+        }
+    }
+
+    /// <summary>
+    /// Handles the <see cref="E:Return" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+    public void OnReturn(Object _Obj, System.EventArgs _EventArg)
+    {
+        if (this.m_CurrentState == State.RacketSelection)
+        {
+            if (GameController.ReturnEvent != null)
+                GameController.ReturnEvent(this, null);
+        }
+    }
+
+    /// <summary>
+    /// Handles the <see cref="E:RacketSelected" /> event.
+    /// </summary>
+    /// <param name="_Obj">The _ object.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+    public void OnRacketSelected(Object _Obj, System.EventArgs _EventArg)
+    {
+        GameController.SelectedRacketVO lVO = (GameController.SelectedRacketVO)_EventArg;
+
+        if (lVO.m_Player == GlobalDatasModel.EPlayer.Player1)
+        {
+            GlobalDatasModel.Instance.SetPlayerRacket(lVO.m_Player, lVO.m_RacketSelectedPos);
+
+            this.m_RacketSelectionPlayer.m_Player = GlobalDatasModel.EPlayer.Player2;
+            GameController.PlayerSelectionChangedEvent(this, this.m_RacketSelectionPlayer);
+        }
+        else if (lVO.m_Player == GlobalDatasModel.EPlayer.Player2)
+        {
+            GlobalDatasModel.Instance.SetPlayerRacket(lVO.m_Player, lVO.m_RacketSelectedPos);
+
+            this.ChangeState(State.RoundStart);
         }
     }
 

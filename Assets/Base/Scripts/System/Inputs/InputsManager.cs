@@ -5,10 +5,13 @@ public class InputsManager : IUpdateBehaviour
 {
     #region "Events"
 
-    public static event GameController.CustomEventHandler MoveUpEvent;
-    public static event GameController.CustomEventHandler MoveDownEvent;
-    public static event GameController.CustomEventHandler ShootEvent;
-    public static event GameController.CustomEventHandler PauseEvent;
+    public event CustomEventHandler MoveUpEvent;
+    public event CustomEventHandler MoveDownEvent;
+    public event CustomEventHandler ShootEvent;
+    public event CustomEventHandler PauseEvent;
+    public event CustomEventHandler LeftEvent;
+    public event CustomEventHandler RightEvent;
+    public event CustomEventHandler ReturnEvent;
 
     #endregion
 
@@ -16,7 +19,7 @@ public class InputsManager : IUpdateBehaviour
 
     public class InputsVO : System.EventArgs
     {
-        public GameController.EPlayer m_EPlayer;
+        public GlobalDatasModel.EPlayer m_EPlayer;
     }
 
     #endregion
@@ -24,7 +27,7 @@ public class InputsManager : IUpdateBehaviour
     private Dictionary<string, bool> m_Player1Inputs = new Dictionary<string, bool>();
     private Dictionary<string, bool> m_Player2Inputs = new Dictionary<string, bool>();
     private Dictionary<string, bool> m_GeneralInputs = new Dictionary<string, bool>();
-    private Dictionary<string, GameController.CustomEventHandler> m_ControlsEvents = new Dictionary<string, GameController.CustomEventHandler>();
+    private Dictionary<string, CustomEventHandler> m_ControlsEvents = new Dictionary<string, CustomEventHandler>();
     private InputsVO m_InputsVO = new InputsVO();
 
     public InputsManager()
@@ -33,11 +36,16 @@ public class InputsManager : IUpdateBehaviour
         MoveDownEvent += GameController.Instance.OnPlayerMoveDown;
         ShootEvent += GameController.Instance.OnPlayerShoot;
         PauseEvent += GameController.Instance.OnPause;
+        LeftEvent += GameController.Instance.OnLeft;
+        RightEvent += GameController.Instance.OnRight;
+        ReturnEvent += GameController.Instance.OnReturn;
 
         this.m_ControlsEvents["MoveUp"] = MoveUpEvent;
         this.m_ControlsEvents["MoveDown"] = MoveDownEvent;
         this.m_ControlsEvents["Shoot"] = ShootEvent;
-        this.m_ControlsEvents["Pause"] = PauseEvent;
+        this.m_ControlsEvents["Left"] = LeftEvent;
+        this.m_ControlsEvents["Right"] = RightEvent;
+        this.m_ControlsEvents["Return"] = ReturnEvent;
 
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls)
             this.m_Player1Inputs[lPair.Key] = false;
@@ -78,7 +86,7 @@ public class InputsManager : IUpdateBehaviour
         {
             if (this.m_Player1Inputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
-                this.m_InputsVO.m_EPlayer = GameController.EPlayer.Player1;
+                this.m_InputsVO.m_EPlayer = GlobalDatasModel.EPlayer.Player1;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
                 this.m_Player1Inputs[lPair.Key] = false;
             }
@@ -88,7 +96,7 @@ public class InputsManager : IUpdateBehaviour
         {
             if (this.m_Player2Inputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
-                this.m_InputsVO.m_EPlayer = GameController.EPlayer.Player2;
+                this.m_InputsVO.m_EPlayer = GlobalDatasModel.EPlayer.Player2;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
                 this.m_Player2Inputs[lPair.Key] = false;
             }
@@ -98,7 +106,7 @@ public class InputsManager : IUpdateBehaviour
         {
             if (this.m_GeneralInputs[lPair.Key] == true && this.m_ControlsEvents.ContainsKey(lPair.Key))
             {
-                this.m_InputsVO.m_EPlayer = GameController.EPlayer.None;
+                this.m_InputsVO.m_EPlayer = GlobalDatasModel.EPlayer.None;
                 this.m_ControlsEvents[lPair.Key](null, this.m_InputsVO);
                 this.m_GeneralInputs[lPair.Key] = false;
             }

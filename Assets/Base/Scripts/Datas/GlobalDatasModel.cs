@@ -1,11 +1,25 @@
 using UnityEngine;
-using SerializerContract;
-using SerializerFactory;
-using SerializerException;
 using System;
 
 public class GlobalDatasModel : Singleton<GlobalDatasModel>
 {
+    #region "Enumerations"
+
+    public enum EPlayer
+    {
+        None,
+        Player1,
+        Player2
+    }
+
+    public enum EGoalHitType
+    {
+        Ball,
+        Enemy
+    }
+
+    #endregion
+
     #region "Datas"
 
     public PlayerDatas m_Player1;
@@ -13,6 +27,9 @@ public class GlobalDatasModel : Singleton<GlobalDatasModel>
     public LevelDatas m_LevelDatas;
     public InputsDatas m_InputsBinding;
     public RacketsDatas m_RacketsData;
+    public float m_BallScoreValue = 1.0f;
+    public float m_EnemyScoreValue = 0.2f;
+    public int m_ScoreLimit = 5;
 
     #endregion
 
@@ -61,4 +78,52 @@ public class GlobalDatasModel : Singleton<GlobalDatasModel>
     {
         this.Initialize();
     }
+
+    #region "Datas utilities"
+
+    public void CalculateScore(EPlayer _Player, EGoalHitType _GoalHitType)
+    {
+        float lScore = 0.0f;
+
+        switch (_GoalHitType)
+        {
+            case EGoalHitType.Ball:
+                lScore += this.m_BallScoreValue;
+                break;
+
+            case EGoalHitType.Enemy:
+               lScore += this.m_EnemyScoreValue;
+                break;
+
+            default:
+                break;
+        }
+
+        if (_Player == EPlayer.Player1)
+            this.m_Player1.m_Score += lScore;
+        else if (_Player == EPlayer.Player2)
+            this.m_Player2.m_Score += lScore;
+    }
+
+    public bool IsScoreLimitReach()
+    {
+        if (this.m_Player1.m_Score >= this.m_ScoreLimit
+                || this.m_Player2.m_Score >= this.m_ScoreLimit)
+            return true;
+        return false;
+    }
+
+    public void SetPlayerRacket(EPlayer _Player, int _RacketDataPosition)
+    {
+        if (_Player == EPlayer.Player1)
+        {
+            this.m_Player1.m_RacketDatas = this.m_RacketsData.m_RacketsList[_RacketDataPosition];
+        }
+        else if (_Player == EPlayer.Player2)
+        {
+            this.m_Player2.m_RacketDatas = this.m_RacketsData.m_RacketsList[_RacketDataPosition];
+        }
+    }
+
+    #endregion
 }

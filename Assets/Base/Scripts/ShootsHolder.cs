@@ -20,12 +20,12 @@ public class ShootsHolder : MonoBehaviour
 
     #region "Events functions"
 
-    public void Shoot(GameController.EPlayer _Player)
+    public void Shoot(GlobalDatasModel.EPlayer _Player)
     {
         GameObject lShoot = this.m_ShootsPool.GetObject();
 
         lShoot.GetComponent<Shoot>().Initialize(this.transform.position, this.m_Player.GetComponent<PlayerController>().m_Player);
-        if (_Player == GameController.EPlayer.Player2)
+        if (_Player == GlobalDatasModel.EPlayer.Player2)
             lShoot.GetComponent<Shoot>().SetMoveDirection(-1);
         lShoot.GetComponent<Shoot>().SetVerticalPosition(this.m_Player.transform.position.y);
         lShoot.GetComponent<Shoot>().m_DisableEvent += this.OnDisableShoot;

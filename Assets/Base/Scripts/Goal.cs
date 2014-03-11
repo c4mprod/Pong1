@@ -6,7 +6,7 @@ public class Goal : MonoBehaviour
 {
     #region "Events"
 
-    private event GameController.CustomEventHandler m_GoalEvent;
+    private event CustomEventHandler m_GoalEvent;
 
     #endregion
 
@@ -14,14 +14,13 @@ public class Goal : MonoBehaviour
 
     public class GoalVO : System.EventArgs
     {
-        public GameController.EPlayer m_EPlayer;
-        public GameController.EGoalHitType m_EGoalHitType;
-
+        public GlobalDatasModel.EPlayer m_EPlayer;
+        public GlobalDatasModel.EGoalHitType m_EGoalHitType;
     }
 
     #endregion
 
-    public GameController.EPlayer m_EPlayer;
+    public GlobalDatasModel.EPlayer m_EPlayer;
     private GoalVO m_GoalVO = new GoalVO();
 
     void OnEnable()
@@ -44,12 +43,12 @@ public class Goal : MonoBehaviour
         switch (collider.tag)
         {
             case "Ball":
-                this.m_GoalVO.m_EGoalHitType = GameController.EGoalHitType.Ball;
+                this.m_GoalVO.m_EGoalHitType = GlobalDatasModel.EGoalHitType.Ball;
                 this.m_GoalEvent(this, this.m_GoalVO);
                 break;
 
             case "Enemy":
-                this.m_GoalVO.m_EGoalHitType = GameController.EGoalHitType.Enemy;
+                this.m_GoalVO.m_EGoalHitType = GlobalDatasModel.EGoalHitType.Enemy;
                 this.m_GoalEvent(this, this.m_GoalVO);
                 break;
 

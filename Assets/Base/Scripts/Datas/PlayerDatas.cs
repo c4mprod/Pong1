@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class PlayerDatas
 {
     private float m_DataScore;
+    public SingleRacketDatas m_RacketDatas = null;
 
     public float m_Score
     {
