@@ -46,6 +46,7 @@ public class InputsManager : IUpdateBehaviour
         this.m_ControlsEvents["Left"] = LeftEvent;
         this.m_ControlsEvents["Right"] = RightEvent;
         this.m_ControlsEvents["Return"] = ReturnEvent;
+        this.m_ControlsEvents["Pause"] = PauseEvent;
 
         foreach (KeyValuePair<string, KeyCode> lPair in GlobalDatasModel.Instance.m_InputsBinding.m_Player1BindableControls)
             this.m_Player1Inputs[lPair.Key] = false;

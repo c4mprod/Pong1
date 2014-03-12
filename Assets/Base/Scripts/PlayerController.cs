@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     /// The m_ prefab shoots holder
     /// </summary>
     public GameObject m_PrefabShootsHolder;
+
     /// <summary>
     /// The m_ player
     /// </summary>
@@ -43,6 +44,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private bool m_CanShoot = true;
 
+    private Vector3 m_ScaleSave;
+    private Vector3 m_Scale;
+
+    private PlayerDatas m_PlayerDatas = null;
+
     /// <summary>
     /// Awakes this instance.
     /// </summary>
@@ -52,10 +58,9 @@ public class PlayerController : MonoBehaviour
         //this.m_ShootsHolderInstance = (GameObject)GameObject.Instantiate(this.m_PrefabShootsHolder);
         //this.m_ShootsHolderInstance.transform.position = this.transform.position;
         //this.m_ShootsHolderInstance.GetComponent<ShootsHolder>().Initialize(this.gameObject);
-        if (this.m_Player == GlobalDatasModel.EPlayer.Player1)
-            GameController.Instance.m_Player1 = this.gameObject;
-        else if (this.m_Player == GlobalDatasModel.EPlayer.Player2)
-            GameController.Instance.m_Player2 = this.gameObject;
+
+        this.m_ScaleSave = this.transform.localScale;
+        this.m_Scale = this.transform.localScale;
     }
 
     /// <summary>
@@ -83,6 +88,8 @@ public class PlayerController : MonoBehaviour
         GameController.MoveUpEvent += this.OnMoveUp;
         GameController.MoveDownEvent += this.OnMoveDown;
         //GameManager.ShootEvent += this.OnShoot;
+        this.LoadRacketDatas();
+
     }
 
     /// <summary>
@@ -155,7 +162,7 @@ public class PlayerController : MonoBehaviour
     {
         InputsManager.InputsVO lInputsVO = (InputsManager.InputsVO)_EventArg;
 
-       if (this.m_CanShoot)
+        if (this.m_CanShoot)
         {
             if (lInputsVO.m_EPlayer == this.m_Player)
             {
@@ -163,6 +170,21 @@ public class PlayerController : MonoBehaviour
             }
             StartCoroutine(this.ShootTimerCoroutine());
         }
+    }
+
+    private void LoadRacketDatas()
+    {
+        if (this.m_Player == GlobalDatasModel.EPlayer.Player1)
+            this.m_PlayerDatas = GlobalDatasModel.Instance.m_Player1;
+        else if (this.m_Player == GlobalDatasModel.EPlayer.Player2)
+            this.m_PlayerDatas = GlobalDatasModel.Instance.m_Player2;
+        else
+            return ;
+        this.GetComponent<SpriteRenderer>().sprite = this.m_PlayerDatas.m_RacketDatas.m_Sprite;
+        this.m_MoveSpeed = this.m_PlayerDatas.m_RacketDatas.m_Speed;
+        this.m_Scale = this.m_ScaleSave;
+        this.m_Scale.y += this.m_PlayerDatas.m_RacketDatas.m_Width;
+        this.transform.localScale = this.m_Scale;
     }
 
     #endregion

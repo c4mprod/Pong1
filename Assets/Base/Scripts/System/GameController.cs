@@ -164,14 +164,6 @@ public class GameController : SingletonBehaviour<GameController>
     /// The m_ round end timer delay
     /// </summary>
     public float m_RoundEndTimerDelay = 5.0f;
-    /// <summary>
-    /// The m_ player1
-    /// </summary>
-    public GameObject m_Player1 = null;
-    /// <summary>
-    /// The m_ player2
-    /// </summary>
-    public GameObject m_Player2 = null;
 
     /// <summary>
     /// The m_ inputs manager
@@ -288,6 +280,7 @@ public class GameController : SingletonBehaviour<GameController>
     private IEnumerator RoundStartState()
     {
         Application.LoadLevel(this.m_GameScene);
+
         GlobalDatasModel.Instance.m_LevelDatas.m_CurrentTime = 0.0f;
         this.m_DataStartTimer = this.m_StartTimerDelay;
 
