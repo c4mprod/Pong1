@@ -44,7 +44,7 @@ public class InputsEditor : EditorWindow
              **/
             if (GUILayout.Button("Save", GUILayout.Width(200f)))
             {
-                GlobalDatasModel.Instance.m_InputsBinding.Save<InputsDatas>(InputsDatas.InputsPath);
+                GlobalDatasModel.Instance.m_InputsBinding.Save<InputsDatas>(InputsDatas.EditorPath);
             }
 
         }

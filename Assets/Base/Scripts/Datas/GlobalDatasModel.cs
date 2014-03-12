@@ -37,7 +37,7 @@ public class GlobalDatasModel : Singleton<GlobalDatasModel>
 
     private void InitializeInputsBinding()
     {
-        this.m_InputsBinding = InputsDatas.Load(InputsDatas.InputsPath);
+        this.m_InputsBinding = InputsDatas.Load(InputsDatas.EditorPath, InputsDatas.PlayPath);
 
         if (this.m_InputsBinding.m_Player1BindableControls.ContainsKey("MoveUp") == false)
         {
@@ -63,7 +63,7 @@ public class GlobalDatasModel : Singleton<GlobalDatasModel>
         this.m_Player1 = new PlayerDatas();
         this.m_Player2 = new PlayerDatas();
         this.m_LevelDatas = new LevelDatas();
-        this.m_RacketsData = RacketsDatas.Load(RacketsDatas.Path);
+        this.m_RacketsData = RacketsDatas.Load(RacketsDatas.EditorPath, RacketsDatas.PlayPath);
 
         this.InitializeInputsBinding();
     }

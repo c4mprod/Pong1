@@ -24,7 +24,7 @@ public class RacketsEditor : EditorWindow
         {
             if (GUILayout.Button("Save", GUILayout.Width(200f)))
             {
-                GlobalDatasModel.Instance.m_RacketsData.Save<RacketsDatas>(RacketsDatas.Path);
+                GlobalDatasModel.Instance.m_RacketsData.Save<RacketsDatas>(RacketsDatas.EditorPath);
             }
         }
         EditorGUILayout.EndHorizontal();

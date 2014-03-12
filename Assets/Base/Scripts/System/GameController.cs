@@ -241,7 +241,11 @@ public class GameController : SingletonBehaviour<GameController>
         this.m_InputsManager = new InputsManager();
         this.m_DataCurrentState = State.None;
         this.m_RacketSelectionPlayer.m_Player = GlobalDatasModel.EPlayer.None;
-        this.ChangeState(State.RacketSelection);
+
+        if (GlobalDatasModel.Instance.m_RacketsData.m_RacketsList != null)
+            this.ChangeState(State.RacketSelection);
+        else
+            this.ChangeState(State.RoundStart);
     }
 
     /// <summary>
