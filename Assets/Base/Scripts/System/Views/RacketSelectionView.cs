@@ -82,7 +82,7 @@ public class RacketSelectionView : MonoBehaviour
 	void Awake() 
 	{
         this.m_ScrollOrderList = this.m_OrderList.GetComponent<ScrollOrderList>();
-        this.m_SelectRacketButton = new Rect(Screen.width / 2 - 100, Screen.height / 2 + 300, 200, 100);
+        this.m_SelectRacketButton = new Rect(Screen.width / 2 - 100, Screen.height / 2 + 400, 150, 50);
         this.m_PlayerLabel = new Rect(Screen.width / 2 - 100, Screen.height / 2 - 350, 500, 100);
 	}
 
