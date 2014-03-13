@@ -28,6 +28,8 @@ public class Initializer : MonoBehaviour
     /// The racket selection scene
     /// </summary>
     public string m_RacketSelectionScene = "RacketSelection";
+
+    public string m_Transition = "Transition";
     /// <summary>
     /// The ball score value
     /// </summary>

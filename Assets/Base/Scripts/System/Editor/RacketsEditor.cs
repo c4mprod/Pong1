@@ -1,11 +1,33 @@
+// ***********************************************************************
+// Assembly         : Assembly-CSharp-Editor
+// Author           : Adrien Albertini
+// Created          : 03-10-2014
+//
+// Last Modified By : Adrien Albertini
+// Last Modified On : 03-12-2014
+// ***********************************************************************
+// <copyright file="RacketsEditor.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
+/// <summary>
+/// Class RacketsEditor.
+/// </summary>
 public class RacketsEditor : EditorWindow
 {
+    /// <summary>
+    /// The m_ scroll position
+    /// </summary>
     private Vector2 m_ScrollPosition;
 
+    /// <summary>
+    /// Initializes this instance.
+    /// </summary>
     [MenuItem("Custom/Rackets Editor")]
     public static void Init()
     {
@@ -14,6 +36,9 @@ public class RacketsEditor : EditorWindow
         lWindow.minSize = new Vector2(500, 500);
     }
 
+    /// <summary>
+    /// Called when [GUI].
+    /// </summary>
     void OnGUI()
     {
         this.m_ScrollPosition = EditorGUILayout.BeginScrollView(this.m_ScrollPosition, false, true);

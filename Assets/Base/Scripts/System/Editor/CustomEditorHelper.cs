@@ -1,9 +1,32 @@
+// ***********************************************************************
+// Assembly         : Assembly-CSharp-Editor
+// Author           : Adrien Albertini
+// Created          : 03-10-2014
+//
+// Last Modified By : Adrien Albertini
+// Last Modified On : 03-10-2014
+// ***********************************************************************
+// <copyright file="CustomEditorHelper.cs" company="">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
+/// <summary>
+/// Class CustomEditorHelper.
+/// </summary>
 public static class CustomEditorHelper
 {
+    /// <summary>
+    /// Called when [GUI].
+    /// </summary>
+    /// <param name="_InputBindingDictionary">The _ input binding dictionary.</param>
+    /// <param name="_ToogleHelper">The _ toogle helper.</param>
+    /// <param name="_TooglePosition">The _ toogle position.</param>
+    /// <param name="_Message">The _ message.</param>
     public static void OnGUI(this Dictionary<string, KeyCode> _InputBindingDictionary, InputsEditor.ToogleHelper _ToogleHelper,
         ref int _TooglePosition, string _Message)
     {
@@ -64,6 +87,10 @@ public static class CustomEditorHelper
 
     #region "Rackets"
 
+    /// <summary>
+    /// Called when [GUI].
+    /// </summary>
+    /// <param name="_RacketsDatas">The _ rackets datas.</param>
     public static void OnGUI(this RacketsDatas _RacketsDatas)
     {
         EditorGUILayout.BeginHorizontal();
@@ -102,6 +129,10 @@ public static class CustomEditorHelper
         EditorGUILayout.EndHorizontal();
     }
 
+    /// <summary>
+    /// Called when [GUI].
+    /// </summary>
+    /// <param name="_RacketDatas">The _ racket datas.</param>
     public static void OnGUI(this SingleRacketDatas _RacketDatas)
     {
         if (_RacketDatas == null)

@@ -24,6 +24,14 @@ public delegate void CustomEventHandler(Object _Obj, System.EventArgs _EArgs);
 
 /// <summary>
 /// Class GameController.
+/// <para>It is the main controller (MVC pattern) of the game logic.
+/// It updates the GlobalDatasModel and warns of a change the associated views </para>
+/// <para>Datas used: : <see cref="GlobalDatasModel.Instance.m_RacketsData" />,
+/// <see cref="GlobalDatasModel.Instance.m_LevelDatas"/>, <see cref="GlobalDatasModel.Instance.m_Player1"/>,
+/// <see cref="GlobalDatasModel.Instance.m_Player2"/></para>
+/// <para>Views associated : <see cref="T:RacketSelectionGUIView" />,
+/// <see cref="T:GameGUIView"/></para>
+/// <para>Models associated : <see cref="T:GlobalDatasModel" /></para>
 /// </summary>
 public class GameController : SingletonBehaviour<GameController>
 {
@@ -114,29 +122,48 @@ public class GameController : SingletonBehaviour<GameController>
     /// </summary>
     public static event CustomEventHandler PlayerSelectionChangedEvent;
 
+    public static event CustomEventHandler LeftClickEvent;
+
     #endregion
 
     #region "EventArgs Value Objects"
 
     /// <summary>
     /// Class WinnerVO.
+    /// <para>Used by the GameController to send the winner to the <see cref="T:GameGUIView"/></para>>
     /// </summary>
     public class WinnerVO : System.EventArgs
     {
         /// <summary>
-        /// The m_ e player
+        /// The player identification.
         /// </summary>
         public GlobalDatasModel.EPlayer m_EPlayer;
     }
 
+    /// <summary>
+    /// Class SelectedRacketVO.
+    /// <para>Used by the RacketSelectionGUIView to send the actual player racket selection to the GameController</para>
+    /// </summary>
     public class SelectedRacketVO : System.EventArgs
     {
+        /// <summary>
+        /// The m_ player
+        /// </summary>
         public GlobalDatasModel.EPlayer m_Player = GlobalDatasModel.EPlayer.None;
+        /// <summary>
+        /// The m_ racket selected position
+        /// </summary>
         public int m_RacketSelectedPos = 0;
     }
 
-    public class RacketSelectionPlayerVO : System.EventArgs
+    /// <summary>
+    /// Class RacketSelectionPlayerVO.
+    /// </summary>
+    public class PlayerRacketSelectionVO : System.EventArgs
     {
+        /// <summary>
+        /// The m_ player
+        /// </summary>
         public GlobalDatasModel.EPlayer m_Player = GlobalDatasModel.EPlayer.None;
     }
 
@@ -152,6 +179,7 @@ public class GameController : SingletonBehaviour<GameController>
     /// The m_ racket selection scene
     /// </summary>
     public string m_RacketSelectionScene = "RacketSelection";
+    public string m_Transition = "Transition";
     /// <summary>
     /// The m_ shoot delay
     /// </summary>
@@ -166,15 +194,18 @@ public class GameController : SingletonBehaviour<GameController>
     public float m_RoundEndTimerDelay = 5.0f;
 
     /// <summary>
-    /// The m_ inputs manager
+    /// The inputs manager
     /// </summary>
     private InputsManager m_InputsManager = null;
     /// <summary>
-    /// The m_ winner
+    /// The winner value object
     /// </summary>
     private WinnerVO m_Winner = new WinnerVO();
 
-    private RacketSelectionPlayerVO m_RacketSelectionPlayer = new RacketSelectionPlayerVO();
+    /// <summary>
+    /// The player racket selection value object
+    /// </summary>
+    private PlayerRacketSelectionVO m_RacketSelectionPlayer = new PlayerRacketSelectionVO();
 
     /// <summary>
     /// The m_ time scale save
@@ -278,7 +309,7 @@ public class GameController : SingletonBehaviour<GameController>
     #region "States coroutines"
 
     /// <summary>
-    /// Rounds the start state.
+    /// The round start state.
     /// </summary>
     /// <returns>IEnumerator.</returns>
     private IEnumerator RoundStartState()
@@ -300,7 +331,7 @@ public class GameController : SingletonBehaviour<GameController>
     }
 
     /// <summary>
-    /// Rounds the state of the run.
+    /// The round run state.
     /// </summary>
     /// <returns>IEnumerator.</returns>
     private IEnumerator RoundRunState()
@@ -327,7 +358,7 @@ public class GameController : SingletonBehaviour<GameController>
     }
 
     /// <summary>
-    /// Rounds the end state.
+    /// The round end state.
     /// </summary>
     /// <returns>IEnumerator.</returns>
     private IEnumerator RoundEndState()
@@ -346,7 +377,7 @@ public class GameController : SingletonBehaviour<GameController>
     }
 
     /// <summary>
-    /// Playerses the state of the selection.
+    /// The player selection racket state.
     /// </summary>
     /// <returns>IEnumerator.</returns>
     private IEnumerator RacketSelectionState()
@@ -356,10 +387,12 @@ public class GameController : SingletonBehaviour<GameController>
         {
             yield return null;
         }
+        Application.LoadLevel(this.m_Transition);
+        Application.LoadLevel(this.m_GameScene);
     }
 
     /// <summary>
-    /// Pauses the state.
+    /// The pause state.
     /// </summary>
     /// <returns>IEnumerator.</returns>
     private IEnumerator PauseState()
@@ -569,6 +602,12 @@ public class GameController : SingletonBehaviour<GameController>
 
             this.ChangeState(State.RoundStart);
         }
+    }
+
+    public void OnLeftClick(Object _Obj, System.EventArgs _EventArg)
+    {
+        if (GameController.LeftClickEvent != null)
+            GameController.LeftClickEvent(_Obj, _EventArg);
     }
 
     #endregion
