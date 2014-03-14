@@ -10,11 +10,6 @@ public static class RendererExtensions
         return (GeometryUtility.TestPlanesAABB(planes, _Bounds));
     }
 
-    //public static bool IsVisibleFrom(this SpriteRenderer _Renderer, Camera _Cam)
-    //{
-    //    return (_IsVisibleFrom(_Renderer.bounds, _Cam));
-    //}
-
     public static bool IsVisibleFrom(this Renderer _Renderer, Camera _Cam)
     {
         return (_IsVisibleFrom(_Renderer.bounds, _Cam));

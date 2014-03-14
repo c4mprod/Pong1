@@ -11,13 +11,7 @@ Platform assembly: E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll (this message 
 Loading E:\GIT\Pong1\Test_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading E:\GIT\Pong1\Test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.057 seconds
+- Completed reload, in  0.051 seconds
 desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-UnloadTime: 0.224517 ms
-Unloading 5 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
-
-Unloading 2 unused Assets to reduce memory usage. Loaded Objects now: 262.
-Total: 0.418671 ms (FindLiveObjects: 0.015395 ms CreateObjectMapping: 0.006842 ms MarkObjects: 0.075266 ms  DeleteObjects: 0.004704 ms)
-

@@ -32,30 +32,26 @@ public class GameGUIView : MonoBehaviour
 
     #endregion
 
-    #region "GUI Rect"
-
     /// <summary>
-    /// The m_ player1 rect
+    /// The m_ timer GUI
     /// </summary>
-    private Rect m_Player1Rect;
+    public GameObject m_TimerGUI;
     /// <summary>
-    /// The m_ player2 rect
+    /// The m_ score1
     /// </summary>
-    private Rect m_Player2Rect;
+    public GameObject m_Score1;
     /// <summary>
-    /// The m_ round run timer rect
+    /// The m_ score2
     /// </summary>
-    private Rect m_RoundRunTimerRect;
+    public GameObject m_Score2;
     /// <summary>
-    /// The m_ continue button
+    /// The m_ continue
     /// </summary>
-    private Rect m_ContinueButton;
+    public GameObject m_Continue;
     /// <summary>
-    /// The m_ quit buton
+    /// The m_ quit
     /// </summary>
-    private Rect m_QuitButon;
-
-    #endregion
+    public GameObject m_Quit;
 
     /// <summary>
     /// The m_ round end MSG
@@ -75,12 +71,6 @@ public class GameGUIView : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        this.m_Player1Rect = new Rect(0, 0, 200, 200);
-        this.m_Player2Rect = new Rect(Screen.width - 250, 0, 500, 500);
-        this.m_RoundRunTimerRect = new Rect(Screen.width / 2 - 100, 0, 500, 500);
-        this.m_ContinueButton = new Rect(Screen.width / 2 - 50, Screen.height / 2 - 50, 100, 20);
-        this.m_QuitButon = new Rect(Screen.width / 2 - 50, Screen.height / 2 - 20, 100, 20);
-
         this.m_StatesFunctionsDictionary[GameController.State.RoundStart] = this.RoundStart;
         this.m_StatesFunctionsDictionary[GameController.State.Pause] = this.Pause;
         this.m_StatesFunctionsDictionary[GameController.State.RoundRun] = this.RoundRun;
@@ -108,7 +98,12 @@ public class GameGUIView : MonoBehaviour
     /// </summary>
     private void RoundStart()
     {
-        GUI.Label(this.m_RoundRunTimerRect, "<size=40> Start in : " + (int)(GameController.Instance.m_StartTimer + 1.0f) + "</size>");
+        //NGUITools.SetActive(this.m_TimerGUI, false);
+        NGUITools.SetActive(this.m_Score1, false);
+        NGUITools.SetActive(this.m_Score2, false);
+        NGUITools.SetActive(this.m_Continue, false);
+        NGUITools.SetActive(this.m_Quit, false);
+        this.m_TimerGUI.GetComponent<UILabel>().text = "Start in : " + (int)(GameController.Instance.m_StartTimer + 1.0f);
     }
 
     /// <summary>
@@ -116,17 +111,24 @@ public class GameGUIView : MonoBehaviour
     /// </summary>
     private void RoundRun()
     {
-        GUI.Label(this.m_Player1Rect, "<size=40> Score : " + GlobalDatasModel.Instance.m_Player1.m_Score + "</size>");
-        GUI.Label(this.m_Player2Rect, "<size=40> Score : " + GlobalDatasModel.Instance.m_Player2.m_Score + "</size>");
-        GUI.Label(this.m_RoundRunTimerRect, "<size=40> Time : " + GlobalDatasModel.Instance.m_LevelDatas.m_CurrentTime.FloatToTimeString() + "</size>");
-    }
+        //NGUITools.SetActive(this.m_TimerGUI, true);
+        NGUITools.SetActive(this.m_Score1, true);
+        NGUITools.SetActive(this.m_Score2, true);
+        NGUITools.SetActive(this.m_Continue, false);
+        NGUITools.SetActive(this.m_Quit, false);
+        this.m_TimerGUI.GetComponent<UILabel>().text = "Time : " + GlobalDatasModel.Instance.m_LevelDatas.m_CurrentTime.FloatToTimeString();
+        this.m_Score1.GetComponent<UILabel>().text = "Score : " + GlobalDatasModel.Instance.m_Player1.m_Score;
+        this.m_Score2.GetComponent<UILabel>().text = "Score : " + GlobalDatasModel.Instance.m_Player2.m_Score;
+     }
 
     /// <summary>
     /// Rounds the end.
     /// </summary>
     private void RoundEnd()
     {
-        GUI.Label(this.m_RoundRunTimerRect, "<size=40>" + this.m_RoundEndMsg + "</size>");
+        NGUITools.SetActive(this.m_Continue, false);
+        NGUITools.SetActive(this.m_Quit, false);
+        this.m_TimerGUI.GetComponent<UILabel>().text = this.m_RoundEndMsg;
     }
 
     /// <summary>
@@ -135,10 +137,8 @@ public class GameGUIView : MonoBehaviour
     private void Pause()
     {
         this.RoundRun();
-        if (GUI.Button(this.m_ContinueButton, "Continue"))
-            GameGUIView.ContinueEvent(this, null);
-        if (GUI.Button(this.m_QuitButon, "Quit"))
-            GameGUIView.QuitEvent(this, null);
+        NGUITools.SetActive(this.m_Continue, true);
+        NGUITools.SetActive(this.m_Quit, true);
     }
 
     #endregion
@@ -171,4 +171,24 @@ public class GameGUIView : MonoBehaviour
         if (this.m_StatesFunctionsDictionary.ContainsKey(GameController.Instance.m_CurrentState))
             this.m_StatesFunctionsDictionary[GameController.Instance.m_CurrentState]();
     }
+
+    #region "Events functions"
+
+    /// <summary>
+    /// Called when [continue].
+    /// </summary>
+    public void OnContinue()
+    {
+        GameGUIView.ContinueEvent(this, null);
+    }
+
+    /// <summary>
+    /// Called when [quit].
+    /// </summary>
+    public void OnQuit()
+    {
+        GameGUIView.QuitEvent(this, null);
+    }
+
+    #endregion
 }

@@ -10,7 +10,7 @@
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
-// ***********************************************************************
+// ************************************************************************
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
@@ -37,15 +37,6 @@ public class RacketSelectionView : MonoBehaviour
     private GameController.SelectedRacketVO m_RacketSelectionVO = new GameController.SelectedRacketVO();
 
     #endregion
-
-    /// <summary>
-    /// The m_ player label
-    /// </summary>
-    private Rect m_PlayerLabel;
-    /// <summary>
-    /// The m_ select racket button
-    /// </summary>
-    private Rect m_SelectRacketButton;
     /// <summary>
     /// The m_ current player
     /// </summary>
@@ -59,6 +50,10 @@ public class RacketSelectionView : MonoBehaviour
     /// </summary>
     private float m_ActionTimer = 0f;
 
+    /// <summary>
+    /// The m_ player label
+    /// </summary>
+    public GameObject m_PlayerLabel = null;
     /// <summary>
     /// The m_ selection cam
     /// </summary>
@@ -82,8 +77,6 @@ public class RacketSelectionView : MonoBehaviour
 	void Awake() 
 	{
         this.m_ScrollOrderList = this.m_OrderList.GetComponent<ScrollOrderList>();
-        this.m_SelectRacketButton = new Rect(Screen.width / 2 - 100, Screen.height / 2 + 400, 150, 50);
-        this.m_PlayerLabel = new Rect(Screen.width / 2 - 100, Screen.height / 2 - 350, 500, 100);
 	}
 
     /// <summary>
@@ -119,12 +112,7 @@ public class RacketSelectionView : MonoBehaviour
     /// </summary>
     void OnGUI()
     {
-        GUI.Label(this.m_PlayerLabel, "<size=30>" + m_CurrentPlayer + " Selection" + "</size>");
- 
-        if (GUI.Button(this.m_SelectRacketButton, "<size=20> Select Racket </size>"))
-        {
-            this.OnReturn(this, null);
-        }
+        this.m_PlayerLabel.GetComponent<UILabel>().text = m_CurrentPlayer + " Selection";
     }
 
     /// <summary>
@@ -147,7 +135,7 @@ public class RacketSelectionView : MonoBehaviour
     /// Handles the <see cref="E:PlayerSelectionChanged" /> event.
     /// </summary>
     /// <param name="_Obj">The _ object.</param>
-    /// <param name="_EventArg">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     private void OnPlayerSelectionChanged(Object _Obj, System.EventArgs _EventArg)
     {
         GameController.PlayerRacketSelectionVO lVO = (GameController.PlayerRacketSelectionVO)_EventArg;
@@ -159,19 +147,19 @@ public class RacketSelectionView : MonoBehaviour
     /// Handles the <see cref="E:LeftClick" /> event.
     /// </summary>
     /// <param name="_Obj">The _ object.</param>
-    /// <param name="_EventArg">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     private void OnLeftClick(Object _Obj, System.EventArgs _EventArg)
     {
         InputsManager.ClickVO lVO = (InputsManager.ClickVO)_EventArg;
 
-        this.m_ScrollOrderList.MoveCam(lVO.m_XAxisValue, lVO.m_YAxisValue);
+        this.m_ScrollOrderList.MoveCam(-lVO.m_XAxisValue, lVO.m_YAxisValue);
     }
 
     /// <summary>
     /// Handles the <see cref="E:Right" /> event.
     /// </summary>
     /// <param name="_Obj">The _ object.</param>
-    /// <param name="_EventArg">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     private void OnRight(Object _Obj, System.EventArgs _EventArg)
     {
         this.m_ScrollOrderList.MoveCam(1.0f, 0.0f);
@@ -181,7 +169,7 @@ public class RacketSelectionView : MonoBehaviour
     /// Handles the <see cref="E:Left" /> event.
     /// </summary>
     /// <param name="_Obj">The _ object.</param>
-    /// <param name="_EventArg">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     private void OnLeft(Object _Obj, System.EventArgs _EventArg)
     {
         this.m_ScrollOrderList.MoveCam(-1.0f, 0.0f);
@@ -191,7 +179,7 @@ public class RacketSelectionView : MonoBehaviour
     /// Handles the <see cref="E:Return" /> event.
     /// </summary>
     /// <param name="_Obj">The _ object.</param>
-    /// <param name="_EventArg">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <param name="_EventArg">The <see cref="System.EventArgs" /> instance containing the event data.</param>
     private void OnReturn(Object _Obj, System.EventArgs _EventArg)
     {
         if (this.m_ActionTimer <= 0.0f)
@@ -202,6 +190,14 @@ public class RacketSelectionView : MonoBehaviour
             this.m_RacketSelectionVO.m_Player = this.m_CurrentPlayer;
             this.m_OnRacketSelectedEvent(this, this.m_RacketSelectionVO);
         }
+    }
+
+    /// <summary>
+    /// Called when [click select racket].
+    /// </summary>
+    public void OnClickSelectRacket()
+    {
+        this.OnReturn(this, null);
     }
 
     #endregion
